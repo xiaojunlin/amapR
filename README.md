@@ -1,7 +1,7 @@
 # gaodemap
 An R package for getting coordinates and locations using Gaode Map API
 
-# Installation
+## Installation
 
 ```
 if (!requireNamespace("devtools"))
@@ -10,7 +10,7 @@ if (!requireNamespace("devtools"))
 devtools::install_github("xiaojunlin/gaodemap") 
 ```
 
-# Usage
+## Usage
 
 Apply an application from https://lbs.amap.com/api/webservice/guide/create-project/get-key. Then register you key here.
 
@@ -19,7 +19,7 @@ library(gaodemap)
 options(gaode.key = 'XXXXXXXXXXX')
 ```
 
-## fetchCoordinate
+### fetchCoordinate
 Get longtitude and latitude from a given address.
 
 ```
@@ -27,7 +27,7 @@ testaddress = c('北京市朝阳区望京东路4号横店大厦','北京市海�
 coordinate <-fetchCoordinate(testaddress)
 ```
 
-## fetchLocation
+### fetchLocation
 Get address from the given longtitude and latitude.
 
 ```
@@ -38,7 +38,7 @@ testdata = data.frame(
 address <- fetchLocation(testdata, lon = 'lon', lat = 'lat')
 ```
 
-# Acknowledgements
+## Acknowledgements
 
 This `gaodemap` R package is developed based on [the codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. We thank Yu Du for sharing. 
 
