@@ -1,5 +1,5 @@
 # gaodemap
-An R package for getting coordinates and locations using Gaode Map API
+An R package for getting coordinates and locations via Gaode Map API
 
 ## Installation
 
