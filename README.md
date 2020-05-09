@@ -8,7 +8,6 @@ if (!requireNamespace("devtools"))
   install.packages("devtools")
   
 devtools::install_github("xiaojunlin/gaodemap") 
-
 ```
 
 # Usage
@@ -18,7 +17,6 @@ Apply an application from https://lbs.amap.com/api/webservice/guide/create-proje
 ```
 library(gaodemap)
 options(gaode.key = 'XXXXXXXXXXX')
-
 ```
 
 ## fetchCoordinate
@@ -38,9 +36,10 @@ testdata = data.frame(
     lon = c(116.329,116.495,116.313,NA,6666)
     )
 address <- fetchLocation(testdata, lon = 'lon', lat = 'lat')
-
 ```
 
-# Acknowledgement
+# Acknowledgements
 
-This `gaodemap` R package is developed based on [the codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. We thank Yu Du for sharing. We modified his codes by adding a progress bar to visilize the data fetching process clearly and make some changes on the arguments.
+This `gaodemap` R package is developed based on [the codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. We thank Yu Du for sharing. 
+
+We modified his codes by adding a progress bar to visualize the data fetching process clearly and make some changes on the function arguments.
