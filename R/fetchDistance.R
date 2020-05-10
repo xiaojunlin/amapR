@@ -9,18 +9,19 @@
 #' @param origin A vector of the coordinates of the origins. The formate should be "longtitude, latitude"
 #' @param dest A vetor of the coordinates of the destinations. The formate should be "longtitude, latitude"
 #' @param type Travel way (0 = direct distance, 2 = drive car; 3 = wall (only support the distance within 5km))
-#'
 #' @return a dataframe including origins coordinates, destinations coordinates, distance (meters) and travel time (seconds).
 #' @export
-#'
 #' @examples
+#' library(gaodemap)
+#' options(gaode.key = 'xxxxxxxxxxxxxxxx')
+#'
 #' data <- data.frame(
 #' origin = c("118.796877,32.060255", "114.3054,45.222", "114.777,33.123", "116.12223,35.333"),
 #' dest   = c("121.473701,31.230416", "122.44221,30.2223", "NA,NA",       "99999,66666")
 #' )
 #'
-#' fetchDistance(origin = data$origin, dest = data$dest, type = '0')
-#' fetchDistance(origin = data$origin, dest = data$dest, type = '1')
+#' fetchDistance(origin = data$origin, dest = data$dest, type = '0') # direct distance
+#' fetchDistance(origin = data$origin, dest = data$dest, type = '1') # travel time by driving a car
 #'
 #' fetchDistance(origin = data$origin, dest = c("118.796877, 34.1234"), type = '1')
 

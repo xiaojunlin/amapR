@@ -19,6 +19,9 @@ fetch coordinate based on address
 Title
 }
 \examples{
+library(gaodemap)
+options(gaode.key = 'xxxxxxxxxxxxxxxx')
+
 address = c('北京市朝阳区望京东路4号横店大厦','北京市海淀区上地信息路9号奎科科技大厦','aaa',NA)
 
 coordinate <-fetchCoordinate(address)

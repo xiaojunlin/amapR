@@ -11,6 +11,9 @@
 #' @return a dataframe
 #' @export
 #' @examples
+#' library(gaodemap)
+#' options(gaode.key = 'xxxxxxxxxxxxxxxx')
+#'
 #' data = data.frame(
 #'   lat = c(39.934,40.013,40.047,NA,4444),
 #'     lon = c(116.329,116.495,116.313,NA,6666)
