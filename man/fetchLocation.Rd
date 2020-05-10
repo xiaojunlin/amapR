@@ -4,11 +4,9 @@
 \alias{fetchLocation}
 \title{fetchLocation}
 \usage{
-fetchLocation(data, lon, lat)
+fetchLocation(lon, lat)
 }
 \arguments{
-\item{data}{name of the data, dataframe}
-
 \item{lon}{the longtidute}
 
 \item{lat}{the latitude}
@@ -23,11 +21,13 @@ fetch location based on longtitude and latitude
 Title
 }
 \examples{
-testdata = data.frame(
-lat = c(39.934,40.013,40.047,NA,4444),
-lon = c(116.329,116.495,116.313,NA,6666)
-)
-address <- fetchLocation(testdata, lon = 'lon', lat = 'lat')
+data = data.frame(
+  lat = c(39.934,40.013,40.047,NA,4444),
+    lon = c(116.329,116.495,116.313,NA,6666)
+    )
+
+ address <- fetchLocation(lon = data$lon, lat = data$lat)
+ address <- fetchLocation(lon = 104.0665, lat = 30.57227)
 
 
 }
