@@ -7,7 +7,6 @@
 #' @import httr
 #' @import jsonlite
 #' @import stringr
-#'
 #' @param data The address
 #' @return a dataframe
 #' @export

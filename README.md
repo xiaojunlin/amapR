@@ -28,7 +28,7 @@ coordinate <-fetchCoordinate(testaddress)
 ```
 
 ### fetchLocation
-Get address from the given longtitude and latitude.
+Get address from the given coordinates.
 
 ```
 testdata = data.frame(
@@ -38,8 +38,22 @@ testdata = data.frame(
 address <- fetchLocation(testdata, lon = 'lon', lat = 'lat')
 ```
 
+### fetchDistance
+Calculate the travel distance between origins and destinations. The formate of the origins or destinations should be "longtitude, latitude".
+
+```
+data <- data.frame(
+    origin = c("118.796877,32.060255", "114.3054,45.222", "114.777,33.123", "116.12223,35.333"),
+    dest   = c("121.473701,31.230416", "122.44221,30.2223", "NA,NA", "99999,66666")
+  )
+
+dist <- fetchDistance(origin = data$origin, dest = data$dest, type = '0')
+dist <- fetchDistance(origin = data$origin, dest = data$dest, type = '1')
+dist <- fetchDistance(origin = data$origin, dest = c("118.796877, 34.1234"), type = '1')
+```
+
 ## Acknowledgements
 
-This `gaodemap` R package is developed based on [the codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. We thank Yu Du for sharing. 
+This `gaodemap` R package is developed based on the [R codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. 
 
-We modified his codes by adding a progress bar to visualize the data fetching process clearly and make some changes on the function arguments.
+We modified his/her R codes by adding a progress bar to visualize the data fetching process clearly. We also make some changes on the function arguments and add the `fetchDsitance` function to calculate the travel distance between origins and destinations. 

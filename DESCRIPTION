@@ -4,7 +4,7 @@ Title: An R package for getting coordinates and locations using Gaode Map API
 Version: 0.1.0
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
-Description: Similar to baidumap package, we use this package to get coordinates and locations via Gaode Map API. We add a progress bar to visulize the of data fetching process.
+Description: Similar to baidumap R package, we use this package to get coordinates, locations and travel distance via Gaode Map API.
 Depends:
     R (>= 3.1.1)
 License: GPL-2
