@@ -48,8 +48,8 @@ fetchDistance <- function(origin, dest, type){
           content <-  data.frame(
             origin = gsub(" ", "", origin[i]),
             dest   = gsub(" ", "", dest[j]),
-            distance = web$results$distance, # unit: meter
-            time = web$results$duration      # unit: second
+            distance = web$results$distance %>% as.numeric(), # unit: meter
+            time = web$results$duration %>% as.numeric()     # unit: second
           )
         } else {
           content <- data.frame(
