@@ -7,15 +7,15 @@
 fetchLocation(lon, lat)
 }
 \arguments{
-\item{lon}{the longtidute}
+\item{lon}{the longitude}
 
 \item{lat}{the latitude}
 }
 \value{
-a dataframe
+a data frame
 }
 \description{
-fetch location based on longtitude and latitude
+fetch location based on longitude and latitude
 }
 \details{
 Title

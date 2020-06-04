@@ -4,17 +4,23 @@
 \alias{fetchDistance}
 \title{fetchDistance}
 \usage{
-fetchDistance(origin, dest, type)
+fetchDistance(data, lon1, lat1, lon2, lat2, type)
 }
 \arguments{
-\item{origin}{A vector of the coordinates of the origins. The formate should be "longtitude, latitude"}
+\item{data}{the data set}
 
-\item{dest}{A vetor of the coordinates of the destinations. The formate should be "longtitude, latitude"}
+\item{lon1}{the longitude of the original point}
 
-\item{type}{Travel way (0 = direct distance, 2 = drive car; 3 = wall (only support the distance within 5km))}
+\item{lat1}{the latitude of the original point}
+
+\item{lon2}{the longitude of the destination point}
+
+\item{lat2}{the latitude of the destination point}
+
+\item{type}{the travel methods (0 = direct distance, 2 = drive car; 3 = walk (only support the distance within 5km))}
 }
 \value{
-a dataframe including origins coordinates, destinations coordinates, distance (meters) and travel time (seconds).
+a data frame including origin coordinates, destination coordinates, distance (meters) and travel time (seconds).
 }
 \description{
 calculate the distance and travel time between origins and destinations
@@ -25,14 +31,15 @@ Title
 \examples{
 library(gaodemap)
 options(gaode.key = 'xxxxxxxxxxxxxxxx')
-
-data <- data.frame(
-origin = c("118.796877,32.060255", "114.3054,45.222", "114.777,33.123", "116.12223,35.333"),
-dest   = c("121.473701,31.230416", "122.44221,30.2223", "NA,NA",       "99999,66666")
+x <- data.frame(
+a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890,  NA),
+b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145,  NA),
+c = c(104.0652, 104.0652, 104.0652, 104.0652, 104.0652,  104.0652),
+d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
 )
+y <- fetchDistance(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
+z <- fetchDistance(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
 
-fetchDistance(origin = data$origin, dest = data$dest, type = '0') # direct distance
-fetchDistance(origin = data$origin, dest = data$dest, type = '1') # travel time by driving a car
 
-fetchDistance(origin = data$origin, dest = c("118.796877, 34.1234"), type = '1')
+
 }

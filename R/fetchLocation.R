@@ -1,14 +1,14 @@
 #' Title
 #' @title fetchLocation
-#' @description fetch location based on longtitude and latitude
+#' @description fetch location based on longitude and latitude
 #' @import progress
 #' @import dplyr
 #' @import httr
 #' @import jsonlite
 #' @import stringr
-#' @param lon the longtidute
+#' @param lon the longitude
 #' @param lat the latitude
-#' @return a dataframe
+#' @return a data frame
 #' @export
 #' @examples
 #' library(gaodemap)

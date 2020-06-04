@@ -20,7 +20,7 @@ options(gaode.key = 'XXXXXXXXXXX')
 ```
 
 ### fetchCoordinate
-Get longtitude and latitude from a given address.
+Get longitude and latitude from a given address.
 
 ```
 address = c('北京市朝阳区望京东路4号横店大厦','北京市海淀区上地信息路9号奎科科技大厦','aaa',NA)
@@ -41,7 +41,7 @@ address <- fetchLocation(lon = 104.0665, lat = 30.57227)
 ```
 
 ### fetchDistance
-Calculate the travel distance between origins and destinations. The formate of the origins or destinations should be "longtitude, latitude".
+Calculate the travel distance between origins and destinations. Please note that the format of the origins or destinations should be "longitude, latitude".
 
 ```
 data <- data.frame(
