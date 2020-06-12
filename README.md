@@ -58,6 +58,6 @@ z <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", ty
 
 ## Acknowledgements
 
-This `gaodemap` R package is developed based on the [R codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. 
+This `gaodemap` R package is inspired by the [R codes](https://zhuanlan.zhihu.com/p/108318434) posted by Yu Du. 
 
-We modified his/her R codes by adding a progress bar to visualize the data fetching process clearly. We also make some changes on the function arguments and add the `fetchDsitance` function to calculate the travel distance between origins and destinations. 
+We have made some changes on the function arguments and add the `fetchDsitance` function to calculate the travel distance between origins and destinations. 
