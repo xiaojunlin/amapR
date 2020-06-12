@@ -24,6 +24,7 @@ Get longitude and latitude from a given address.
 
 ```R
 address = c('北京市朝阳区望京东路4号横店大厦','北京市海淀区上地信息路9号奎科科技大厦','aaa',NA)
+
 coordinate <-fetchCoordinate(address)
 ```
 
@@ -41,16 +42,16 @@ address <- fetchLocation(lon = 104.0665, lat = 30.57227)
 ```
 
 ### fetchDistance
-Calculate the travel distance between origins and destinations. Please note that the format of the origins or destinations should be "longitude, latitude".
+Calculate the travel distance between origins and destinations. There are three travel ways supported, including direct line (type = 0), drive (type = 1) and walk (type = 2).
 
 ```R
-
 x <- data.frame(
   a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890,  NA),
   b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145,  NA),
   c = c(104.0652, 104.0652, 104.0652, 104.0652, 104.0652,  104.0652),
   d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
   )
+
 y <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
 z <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
 ```

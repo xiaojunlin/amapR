@@ -4,7 +4,7 @@
 \alias{fetchCoordinate}
 \title{fetchCoordinate}
 \usage{
-fetchCoordinate(data)
+fetchCoordinate(address)
 }
 \arguments{
 \item{data}{The address}
