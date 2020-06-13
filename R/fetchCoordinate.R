@@ -1,12 +1,8 @@
-fetchCoordinate.core <- function(data){
-  # key
-  if (is.null(getOption('gaode.key'))) stop("Please fill your key using options(gaode.key = 'XXXXXXXXXXXXX')")
-
-  result <- matrix(nrow=length(data),ncol=3)
+fetchCoordinate.core <- function(address){
+  result <- matrix(nrow=length(address),ncol=3)
   colnames(result) <- c("address", "lon", "lat")
-
-  for (i in 1:length(data)){
-    addr <- gsub(" ", "", data[i])
+  for (i in 1:length(address)){
+    addr <- gsub(" ", "", address[i])
     url = paste0("https://restapi.amap.com/v3/geocode/geo?address=", addr, "&output=json&key=", getOption('gaode.key'))
     web =  tryCatch(getURL(url),error = function(e) {getURL(url, timeout = 200)})
     res <- gsub('.*?"location":"([\\.,0-9]*).*', '\\1', web)
@@ -20,15 +16,15 @@ fetchCoordinate.core <- function(data){
 #' Title
 #' @title fetchCoordinate
 #' @description fetch coordinate based on address
-#' @import httr
-#' @param data The address
-#' @return a dataframe
+#' @import RCurl
+#' @param address The address
+#' @return a matrix
 #' @export fetchCoordinate
 #' @examples
 #' library(gaodemap)
 #' options(gaode.key = 'xxxxxxxxxxxxxxxx')
 #'
-#' address = c('北京市朝阳区望京东路4号横店大厦','北京市海淀区上地信息路9号奎科科技大厦','aaa',NA)
+#' address = c('四川大学','北京大学','aaa',NA)
 #'
 #' coordinate <-fetchCoordinate(address)
 #'
@@ -39,7 +35,8 @@ fetchCoordinate <- function(address){
   if(length(address)<=10){
     res<-fetchCoordinate.core(address)
   }else if(require(parallel)){
-    res<-mclapply(mc.cores = getOption("mc.cores", detectCores()*10), X = address, FUN = function(x){fetchCoordinate.core(x)})  #mclapply for macOS
+    res<-mclapply(X = address, FUN = function(x){fetchCoordinate.core(x)},
+                  mc.cores = getOption("mc.cores", detectCores()*6) )  # for macOS
     res<-do.call('rbind', res)
   }else{
     warning('can not run in parallel mode without package parallel')
@@ -47,4 +44,3 @@ fetchCoordinate <- function(address){
   }
   res
 }
-

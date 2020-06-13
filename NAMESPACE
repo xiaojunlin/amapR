@@ -3,6 +3,7 @@
 export(fetchCoordinate)
 export(fetchDistance)
 export(fetchLocation)
+import(RCurl)
 import(dplyr)
 import(httr)
 import(jsonlite)

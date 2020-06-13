@@ -7,10 +7,10 @@
 fetchCoordinate(address)
 }
 \arguments{
-\item{data}{The address}
+\item{address}{The address}
 }
 \value{
-a dataframe
+a matrix
 }
 \description{
 fetch coordinate based on address
@@ -22,7 +22,7 @@ Title
 library(gaodemap)
 options(gaode.key = 'xxxxxxxxxxxxxxxx')
 
-address = c('北京市朝阳区望京东路4号横店大厦','北京市海淀区上地信息路9号奎科科技大厦','aaa',NA)
+address = c('四川大学','北京大学','aaa',NA)
 
 coordinate <-fetchCoordinate(address)
 
