@@ -36,7 +36,8 @@ fetchCoordinate <- function(address){
     res<-fetchCoordinate.core(address)
   }else if(require(parallel)){
     res<-mclapply(X = address, FUN = function(x){fetchCoordinate.core(x)},
-                  mc.cores = getOption("mc.cores", detectCores()*6) )  # for macOS
+                  mc.cores = getOption("mc.cores", detectCores()*6),
+                  mc.preschedule = FALSE)  # for macOS
     res<-do.call('rbind', res)
   }else{
     warning('can not run in parallel mode without package parallel')
