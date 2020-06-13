@@ -23,7 +23,7 @@ options(gaode.key = 'XXXXXXXXXXX')
 Get longitude and latitude from a given address.
 
 ```R
-address = c('北京市朝阳区望京东路4号横店大厦','北京市海淀区上地信息路9号奎科科技大厦','aaa',NA)
+address = c('四川大学','北京大学','aaa',NA)
 
 coordinate <-fetchCoordinate(address)
 ```
@@ -32,12 +32,12 @@ coordinate <-fetchCoordinate(address)
 Get address from the given coordinates.
 
 ```R
-data = data.frame(
+coordinate = data.frame(
       lat = c(39.934,40.013,40.047,NA,4444),
       lon = c(116.329,116.495,116.313,NA,6666)
     )
 
-address <- fetchLocation(lon = data$lon, lat = data$lat)
+address <- fetchLocation(lon = coordinate$lon, lat = coordinate$lat)
 address <- fetchLocation(lon = 104.0665, lat = 30.57227)
 ```
 
