@@ -1,7 +1,7 @@
 Package: gaodemap
 Type: Package
 Title: An R package for getting coordinate, location and travel distance using Gaode Map API
-Version: 0.1.4
+Version: 0.1.2
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Description: Similar to baidumap R package, we use this package to get coordinates, locations and travel distance via Gaode Map API.
