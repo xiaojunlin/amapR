@@ -2,6 +2,7 @@
 #' @title fetchCoordinate
 #' @description get coordinate based on address
 #' @import RCurl
+#' @import progress
 #' @param address The address
 #' @return a data.frame
 #' @export fetchCoordinate
