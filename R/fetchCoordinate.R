@@ -21,7 +21,7 @@ fetchCoordinate <- function(address){
   if (is.null(getOption('gaode.key'))) stop("Please fill your key using options(gaode.key = 'XXXXXXXXXXXXX')")
   # url
   url <- paste0("https://restapi.amap.com/v3/geocode/geo?address=", address, "&output=json&key=", getOption('gaode.key'))
-  res <- c()
+  res <- character()
   # QPS limitation: no more than 200 queries per second. Thus, we split the urls into groups with no more than 190 cases
   group_url<- split(url, ceiling(seq_along(url)/190))
   pb <- progress_bar$new(format = "Processing: [:bar] :percent", total =  length(group_url))
@@ -35,14 +35,16 @@ fetchCoordinate <- function(address){
   #transform
   trans <-function(x){
     res = gsub('.*?"location":"([\\.,0-9]*).*', '\\1', x)
-    lon = as.numeric(strsplit(res, ",")[[1]][1])
-    lat = as.numeric(strsplit(res, ",")[[1]][2])
+    lon = strsplit(res, ",")[[1]][1]
+    lat = strsplit(res, ",")[[1]][2]
     return(c("address" = "" ,"longitude" = lon, "latitude" = lat))
   }
   res <- t(sapply(res, trans))
   res <- as.data.frame(res)
   rownames(res) <- NULL
   res$address <- address
+  res$longitude <- as.numeric(res$longitude)
+  res$latitude  <- as.numeric(res$latitude)
 
   return(res)
 }
