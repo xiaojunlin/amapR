@@ -1,47 +1,47 @@
-fetchCoordinate.core <- function(address){
-  result <- matrix(nrow=length(address),ncol=3)
-  colnames(result) <- c("address", "lon", "lat")
-  for (i in 1:length(address)){
-    addr <- gsub(" ", "", address[i])
-    url = paste0("https://restapi.amap.com/v3/geocode/geo?address=", addr, "&output=json&key=", getOption('gaode.key'))
-    web =  tryCatch(getURL(url),error = function(e) {getURL(url, timeout = 200)})
-    res <- gsub('.*?"location":"([\\.,0-9]*).*', '\\1', web)
-    lon = as.numeric(strsplit(res, ",")[[1]][1])
-    lat = as.numeric(strsplit(res, ",")[[1]][2])
-    result[i,]  <- c("address"= addr, "longitude" = lon, "latitude" = lat)
-  }
-  return(result)
-}
-
 #' Title
 #' @title fetchCoordinate
-#' @description fetch coordinate based on address
+#' @description get coordinate based on address
 #' @import RCurl
 #' @param address The address
-#' @return a matrix
+#' @return a data.frame
 #' @export fetchCoordinate
 #' @examples
 #' library(gaodemap)
-#' options(gaode.key = 'xxxxxxxxxxxxxxxx')
 #'
-#' address = c('四川大学','北京大学','aaa',NA)
+#' x <- data.frame(Number= 1:500,
+#'                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔冰工业大学", "复旦大学"))
 #'
-#' coordinate <-fetchCoordinate(address)
+#'system.time(z <- fetchCoordinate(x$address))
+#'
+#'fetchCoordinate("四川大学")
 #'
 fetchCoordinate <- function(address){
   # key
   if (is.null(getOption('gaode.key'))) stop("Please fill your key using options(gaode.key = 'XXXXXXXXXXXXX')")
-
-  if(length(address)<=10){
-    res<-fetchCoordinate.core(address)
-  }else if(require(parallel)){
-    res<-mclapply(X = address, FUN = function(x){fetchCoordinate.core(x)},
-                  mc.cores = getOption("mc.cores", detectCores()*6),
-                  mc.preschedule = FALSE)  # for macOS
-    res<-do.call('rbind', res)
-  }else{
-    warning('can not run in parallel mode without package parallel')
-    res<-fetchCoordinate.core(address)
+  # url
+  url <- paste0("https://restapi.amap.com/v3/geocode/geo?address=", address, "&output=json&key=", getOption('gaode.key'))
+  res <- c()
+  # QPS limitation: no more than 200 queries per second. Thus, we split the urls into groups with no more than 190 cases
+  group_url<- split(url, ceiling(seq_along(url)/190))
+  pb <- progress_bar$new(format = "Processing: [:bar] :percent", total =  length(group_url))
+  pb$tick(0)
+  for (i in 1:length(group_url)) {
+    res_add <- getURIAsynchronous(group_url[[i]])
+    res <- c(res, res_add)
+    pb$tick(1)
+    Sys.sleep(1/10)
   }
-  res
+  #transform
+  trans <-function(x){
+    res = gsub('.*?"location":"([\\.,0-9]*).*', '\\1', x)
+    lon = as.numeric(strsplit(res, ",")[[1]][1])
+    lat = as.numeric(strsplit(res, ",")[[1]][2])
+    return(c("address" = "" ,"longitude" = lon, "latitude" = lat))
+  }
+  res <- t(sapply(res, trans))
+  res <- as.data.frame(res)
+  rownames(res) <- NULL
+  res$address <- address
+
+  return(res)
 }
