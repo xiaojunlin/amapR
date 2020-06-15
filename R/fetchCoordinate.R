@@ -24,7 +24,7 @@ fetchCoordinate <- function(address){
   res <- character()
   # QPS limitation: no more than 200 queries per second. Thus, we split the urls into groups with no more than 190 cases
   group_url<- split(url, ceiling(seq_along(url)/190))
-  pb <- progress_bar$new(format = "Processing: [:bar] :percent", total =  length(group_url))
+  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(group_url))
   pb$tick(0)
   for (i in 1:length(group_url)) {
     res_add <- getURIAsynchronous(group_url[[i]])
