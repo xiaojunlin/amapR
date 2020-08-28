@@ -20,7 +20,7 @@ fetchCoordinate <- function(address){
   # key
   if (is.null(getOption('gaode.key'))) stop("Please fill your key using options(gaode.key = 'XXXXXXXXXXXXX')")
   # url
-  address = gsub(' |#', '', address)
+  #address = gsub(' |#', '', address)
   url <- paste0("https://restapi.amap.com/v3/geocode/geo?address=", address, "&output=json&key=", getOption('gaode.key'))
   res <- character()
   # QPS limitation: no more than 200 queries per second. Thus, we split the urls into groups with no more than 190 cases
