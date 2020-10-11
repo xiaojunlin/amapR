@@ -1,14 +1,15 @@
 #' Title
 #' @title fetchCoordinate
 #' @description get coordinate based on address
-#' @import RCurl
+#' @import jsonlite
 #' @import progress
+#' @import tidyverse
 #' @param address The address
 #' @return a data.frame
 #' @export fetchCoordinate
 #' @examples
 #' library(gaodemap)
-#'
+#' options(gaode.key = "xxxxxxxxxxxxxxxxxx")
 #' x <- data.frame(Number= 1:500,
 #'                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 #'
@@ -16,36 +17,42 @@
 #'
 #'fetchCoordinate("四川大学")
 #'
+#'
+#'
 fetchCoordinate <- function(address){
   # key
   if (is.null(getOption('gaode.key'))) stop("Please fill your key using options(gaode.key = 'XXXXXXXXXXXXX')")
-  # url
-  #address = gsub(' |#', '', address)
-  url <- paste0("https://restapi.amap.com/v3/geocode/geo?address=", address, "&output=json&key=", getOption('gaode.key'))
-  res <- character()
-  # QPS limitation: no more than 200 queries per second. Thus, we split the urls into groups with no more than 190 cases
-  group_url<- split(url, ceiling(seq_along(url)/190))
-  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(group_url))
-  pb$tick(0)
-  for (i in 1:length(group_url)) {
-    res_add <- getURIAsynchronous(group_url[[i]])
-    res <- c(res, res_add)
-    pb$tick(1)
-    Sys.sleep(1/10)
-  }
-  #transform
-  trans <-function(x){
-    res = gsub('.*?"location":"([\\.,0-9]*).*', '\\1', x)
-    lon = strsplit(res, ",")[[1]][1]
-    lat = strsplit(res, ",")[[1]][2]
-    return(c("address" = "" ,"longitude" = lon, "latitude" = lat))
-  }
-  res <- t(sapply(res, trans))
-  res <- as.data.frame(res)
-  rownames(res) <- NULL
-  res$address <- address
-  res$longitude <- as.numeric(res$longitude)
-  res$latitude  <- as.numeric(res$latitude)
 
-  return(res)
+  df <- as.data.frame(address)
+  dat <- slice(df, 0)
+  dat$coordinate <- NULL
+
+  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(seq(1, nrow(df), by = 10)))
+  pb$tick(0)
+
+  for (i in seq(1, nrow(df), by = 10)) {
+    pb$tick(1)
+    try({
+      j = i + 9
+      tmp <- df %>% slice(i:j)
+      url <- tmp %>%
+        pull(address) %>%
+        paste0(collapse = "|") %>%
+        paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('gaode.key'), "&batch=true")
+      list <- fromJSON(URLencode(url))
+      list$geocodes %>%
+        as_tibble() %>%
+        select(coordinate = location) %>%
+        bind_cols(tmp, .) -> tmp
+      tmp$coordinate <- as.character(tmp$coordinate)
+      dat <- bind_rows(dat, tmp)
+    })
+  }
+
+  finaldat <- dat %>%
+    separate("coordinate", into = c("longitude", "latitude"), sep = ",") %>%
+    mutate(longitude = as.numeric(longitude),
+           latitude = as.numeric(latitude))
+
+  return(finaldat)
 }
