@@ -4,6 +4,7 @@
 #' @import jsonlite
 #' @import progress
 #' @import tidyverse
+#' @import tidyr
 #' @param address The address
 #' @return a data.frame
 #' @export fetchCoordinate
