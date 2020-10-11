@@ -4,7 +4,6 @@
 #' @import jsonlite
 #' @import progress
 #' @import tidyverse
-#' @import tidyr
 #' @param address The address
 #' @return a data.frame
 #' @export fetchCoordinate
@@ -51,7 +50,7 @@ fetchCoordinate <- function(address){
   }
 
   finaldat <- dat %>%
-    separate("coordinate", into = c("longitude", "latitude"), sep = ",") %>%
+    tidyr::separate("coordinate", into = c("longitude", "latitude"), sep = ",") %>%
     mutate(longitude = as.numeric(longitude),
            latitude = as.numeric(latitude))
 
