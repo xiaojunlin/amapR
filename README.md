@@ -35,8 +35,8 @@ x <- data.frame(Number= 1:500,
                  address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 
 system.time(z <- fetchCoordinate(x$address))
-#   user  system elapsed                                                                                                         
-#  8.718   0.972  10.675 
+#   user   system   elapsed                                                                                                         
+#   1.389  0.100    9.125  
 
 ###################
 # 20,000 addresses
@@ -45,8 +45,8 @@ x <- data.frame(Number= 1:20000,
                  address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 
 system.time(z <- fetchCoordinate(x$address))
-#    user  system elapsed                                         
-# 366.269  23.965 431.545 
+#    user     system    elapsed                                         
+#    51.156   3.293     360.325 
 ```
 
 ### fetchLocation
@@ -73,6 +73,6 @@ x <- data.frame(
   d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
   )
 
-y <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0) #
-z <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
+y <- fetchDistance(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
+z <- fetchDistance(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
 ```
