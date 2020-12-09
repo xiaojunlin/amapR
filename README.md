@@ -1,4 +1,4 @@
-# gaodemap
+# amap
 An R package using AMap API.
 
 ## Installation
@@ -7,7 +7,7 @@ An R package using AMap API.
 if (!requireNamespace("devtools"))
   install.packages("devtools")
   
-devtools::install_github("xiaojunlin/gaodemap") 
+devtools::install_github("xiaojunlin/amap") 
 ```
 
 ## Usage
@@ -15,23 +15,21 @@ devtools::install_github("xiaojunlin/gaodemap")
 Apply an application from https://lbs.amap.com/api/webservice/guide/create-project/get-key. Then register you key here.
 
 ```R
-library(gaodemap)
-options(gaode.key = 'XXXXXXXXXXX')
+library(amap)
+options(amap.key = 'XXXXXXXXXXX')
 ```
 
 ### fetchCoordinate
 Get longitude and latitude from the given address.
 
-Considering the QPS (queries per second) limitation of Gaode Map, we have limited the speed of http request in the `fetchCoordinate` function to avoid invalid queries. In our tests, this function spent 10.7 seconds and 431.5 seconds for 500 and 20,000 cases, respectively. We estimated that the speed of getting  coordinats of addresses is about 50 cases per second. Additionally, we have provided a progress bar to visualizing the  progress and the estimated completion time in seconds. 
-
 ```R
 ###########
-# 1 case
+# 1 address
 ###########
 fetchCoordinate("四川大学")
 
 ###############
-# 500 cases
+# 500 addresses
 ###############
 x <- data.frame(Number= 1:500,
                  address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
@@ -40,9 +38,9 @@ system.time(z <- fetchCoordinate(x$address))
 #   user  system elapsed                                                                                                         
 #  8.718   0.972  10.675 
 
-################
-# 20,000 cases
-################
+###################
+# 20,000 addresses
+###################
 x <- data.frame(Number= 1:20000,
                  address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 
@@ -52,7 +50,7 @@ system.time(z <- fetchCoordinate(x$address))
 ```
 
 ### fetchLocation
-Get address from the given coordinates.
+Get the address from the given coordinates.
 
 ```R
 coordinate = data.frame(
