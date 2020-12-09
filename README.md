@@ -12,7 +12,7 @@ devtools::install_github("xiaojunlin/amap")
 
 ## Usage
 
-Apply an application from https://lbs.amap.com/api/webservice/guide/create-project/get-key. Then register you key here.
+Before using the package, please apply your key from the [AMap](https://lbs.amap.com/api/webservice/guide/create-project/get-key).
 
 ```R
 library(amap)
@@ -20,7 +20,7 @@ options(amap.key = 'XXXXXXXXXXX')
 ```
 
 ### fetchCoordinate
-Get longitude and latitude from the given address.
+Get the coordinates (longitude and latitude) from the given addresses.
 
 ```R
 ###########
@@ -50,7 +50,7 @@ system.time(z <- fetchCoordinate(x$address))
 ```
 
 ### fetchLocation
-Get the address from the given coordinates.
+Get the addresses from the given coordinates.
 
 ```R
 coordinate = data.frame(
@@ -63,7 +63,7 @@ address <- fetchLocation(lon = 104.0665, lat = 30.57227)
 ```
 
 ### fetchDistance
-Calculate the travel distance between origins and destinations. There are three travel ways supported, including direct line (type = 0), drive (type = 1) and walk (type = 2).
+Calculate the travel distance and travel time between origins and destinations. There are three travel ways, including the straight line distancee (type = 0), driving (type = 1) and walking (type = 2). The returned results are travel distance (unit: meter) and travel time (unit: second, only for driving and walking).
 
 ```R
 x <- data.frame(
@@ -73,6 +73,6 @@ x <- data.frame(
   d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
   )
 
-y <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
+y <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0) #
 z <- fetchDistance2(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
 ```

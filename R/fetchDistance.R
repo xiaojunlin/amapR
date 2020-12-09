@@ -15,8 +15,8 @@
 #' @return a data frame including origin coordinates, destination coordinates, distance (meters) and travel time (seconds).
 #' @export
 #' @examples
-#' library(gaodemap)
-#' options(gaode.key = 'xxxxxxxxxxxxxxxx')
+#' library(amap)
+#' options(amap.key = 'xxxxxxxxxxxxxxxx')
 #' x <- data.frame(
 #' a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890,  NA),
 #' b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145,  NA),
@@ -33,15 +33,16 @@ fetchDistance <- function(data, lon1, lat1, lon2, lat2, type){
   header  <- c("User-Agent"="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36")
   payload = list(
     'output' = 'json',
-    'key' = getOption('gaode.key')
+    'key' = getOption('amap.key')
   )
-  if (is.null(getOption('gaode.key'))) stop("Please fill your key, using [ options(gaode.key = 'XXXXXXXXXXXXX') ]")
+  if (is.null(getOption('amap.key'))) stop("Please fill your key, using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
 
 
   distinfo <- data.frame(lon1= c(), lat1=c(), lon2 = c(), lat2= c(), distance = c(), time =c())
   pb <- progress_bar$new(format = "Fetching travel distance: [:bar] :current/:total (:percent)",
                          total = nrow(data))
   pb$tick(0)
+
   for (i in 1:nrow(data)){
     orig = paste(data[lon1][i,], data[lat1][i,], sep=",")
     dest = paste(data[lon2][i,], data[lat2][i,], sep=",")
@@ -81,6 +82,5 @@ fetchDistance <- function(data, lon1, lat1, lon2, lat2, type){
     Sys.sleep(1 / 100)
   }
 
-  print("Done!")
   return(distinfo)
 }

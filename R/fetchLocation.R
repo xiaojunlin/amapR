@@ -11,8 +11,8 @@
 #' @return a data frame
 #' @export
 #' @examples
-#' library(gaodemap)
-#' options(gaode.key = 'xxxxxxxxxxxxxxxx')
+#' library(amap)
+#' options(amap.key = 'xxxxxxxxxxxxxxxx')
 #'
 #' coordinate = data.frame(
 #'   lat = c(39.934,40.013,40.047,NA,4444),
@@ -28,9 +28,9 @@ fetchLocation <- function(lon, lat){
   header = c('User-Agent'= 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36')
   payload = list(
     'output' = 'json',
-    'key'    = getOption('gaode.key')
+    'key'    = getOption('amap.key')
   )
-  if (is.null(getOption('gaode.key'))) stop("Please fill your key, using [ options(gaode.key = 'XXXXXXXXXXXXX') ]")
+  if (is.null(getOption('amap.key'))) stop("Please fill your key, using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
   addinfo = data.frame(address = c(), lon = c(), lat = c())
   pb <- progress_bar$new(format = "Fetching location: [:bar] :current/:total (:percent)",
                          total = length(lon))

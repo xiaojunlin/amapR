@@ -8,8 +8,8 @@
 #' @return a data.frame
 #' @export fetchCoordinate
 #' @examples
-#' library(gaodemap)
-#' options(gaode.key = "xxxxxxxxxxxxxxxxxx")
+#' library(amap)
+#' options(amap.key = "xxxxxxxxxxxxxxxxxx")
 #' x <- data.frame(Number= 1:500,
 #'                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 #'
@@ -20,8 +20,8 @@
 #'
 #'
 fetchCoordinate <- function(address){
-  # key
-  if (is.null(getOption('gaode.key'))) stop("Please fill your key using options(gaode.key = 'XXXXXXXXXXXXX')")
+
+  if (is.null(getOption('amap.key'))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
 
   df <- as.data.frame(address)
   dat <- slice(df, 0)
@@ -38,7 +38,7 @@ fetchCoordinate <- function(address){
       url <- tmp %>%
         pull(address) %>%
         paste0(collapse = "|") %>%
-        paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('gaode.key'), "&batch=true")
+        paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('amap.key'), "&batch=true")
       list <- fromJSON(URLencode(url))
       list$geocodes %>%
         as_tibble() %>%

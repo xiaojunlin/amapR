@@ -1,10 +1,10 @@
-Package: gaodemap
+Package: amap
 Type: Package
-Title: An R package for getting coordinate, location and travel distance using Gaode Map API
-Version: 0.1.2
+Title: An R package using AMap API
+Version: 0.1.3
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
-Description: Similar to baidumap R package, we use this package to get coordinates, locations and travel distance via Gaode Map API.
+Description: This R package provides useful map tools for social science research by using the AMap API. In the latest version, you can use it to getting the coordinates for the given addresses, converting the coordinates to the addresses, and calculating the travel distance between different addresses. 
 Depends:
     R (>= 4.0.0)
 License: GPL-2

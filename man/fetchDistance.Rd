@@ -29,8 +29,8 @@ calculate the distance and travel time between origins and destinations
 Title
 }
 \examples{
-library(gaodemap)
-options(gaode.key = 'xxxxxxxxxxxxxxxx')
+library(amap)
+options(amap.key = 'xxxxxxxxxxxxxxxx')
 x <- data.frame(
 a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890,  NA),
 b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145,  NA),

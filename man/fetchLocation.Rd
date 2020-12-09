@@ -21,8 +21,8 @@ fetch location based on longitude and latitude
 Title
 }
 \examples{
-library(gaodemap)
-options(gaode.key = 'xxxxxxxxxxxxxxxx')
+library(amap)
+options(amap.key = 'xxxxxxxxxxxxxxxx')
 
 coordinate = data.frame(
   lat = c(39.934,40.013,40.047,NA,4444),
