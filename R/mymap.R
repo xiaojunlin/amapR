@@ -1,79 +1,79 @@
 #' Title
-#' @title map
+#' @title mymap
 #' @description Get the map data with sf format
 #' @import sf
 #' @import tidyverse
 #' @param code The administrative code
 #' @param level The level of map data, including province, city and district
 #' @return sf data
-#' @export map
+#' @export mymap
 #' @examples
 #' library(amap)
 #' options(amap.key = "xxxxxxxxxxxxxxxxxx")
 #'
 #' # China map
 #' # (1) map at province level
-#' china1 <- map(code = 100000, level = "province")
+#' china1 <- mymap(code = 100000, level = "province")
 #' ggplot(china1) +
 #'  geom_sf(fill = "white") +
 #'  theme_bw()
 #' # (2) map at city level
-#' china2 <- map(code = 100000,  level = "city")
+#' china2 <- mymap(code = 100000,  level = "city")
 #' ggplot(china2) +
 #'  geom_sf(fill = "white") +
 #'  theme_bw()
 #' # (3) map at district level
-#' china3 <- map(code = 100000,  level = "district")
+#' china3 <- mymap(code = 100000,  level = "district")
 #' ggplot(china3) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' # (4) with missing value in the argment "level"
-#' china4 <- map(code = 100000)
+#' china4 <- mymap(code = 100000)
 #' ggplot(china4) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #'
 #' # Province map
 #' # (1) map at province level
-#' sichuan1 <- map(code = 510000, level = "province")
+#' sichuan1 <- mymap(code = 510000, level = "province")
 #' ggplot(sichuan1) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' # (2) map at city level
-#' sichuan2 <- map(code = 510000, level = "city")
+#' sichuan2 <- mymap(code = 510000, level = "city")
 #' ggplot(sichuan2) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' #Note: The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.
-#' beijing1 <- map(code = 110000, level = "city")
-#' beijing2 <- map(code = 110000, level = "district")
+#' beijing1 <- mymap(code = 110000, level = "city")
+#' beijing2 <- mymap(code = 110000, level = "district")
 #' ggplot(beijing2) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' # (3) map at district level
-#' sichuan3 <- map(code = 510000, level = "district")
+#' sichuan3 <- mymap(code = 510000, level = "district")
 #' ggplot(sichuan3) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' # (4) with missing value in the argment "level"
-#' sichuan4 <- map(code = 510000)
+#' sichuan4 <- mymap(code = 510000)
 #' ggplot(sichuan4) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #'
 #' # City map
 #' # (1) map at city level
-#' chengdu1 <- map(code = 510100, level = "city")
+#' chengdu1 <- mymap(code = 510100, level = "city")
 #' ggplot(chengdu1) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' # (2) map at district level
-#' chengdu2 <- map(code = 510100, level = "district")
+#' chengdu2 <- mymap(code = 510100, level = "district")
 #' ggplot(chengdu2) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
 #' # (3) with missing value in the argment "level"
-#' chengdu3 <- map(code = 510100)
+#' chengdu3 <- mymap(code = 510100)
 #' ggplot(chengdu3) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
@@ -82,7 +82,7 @@
 #'
 #'
 
-map<- function(code, level = "default"){
+mymap<- function(code, level = "default"){
   if (code == 100000) {
     switch(level,
            province = {
