@@ -86,13 +86,13 @@ mymap<- function(code, level = "default"){
   if (code == 100000) {
     switch(level,
            province = {
-             map_province <- read_sf("https://geo.datav.aliyun.com/areas/bound/100000_full.json") %>% select(c(adcode, name, level))
+             map_province <- read_sf("https://geo.datav.aliyun.com/areas_v2/bound/100000_full.json") %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
              map <- map_province
            },
            city = {
              # 省级地图
-             map_province <- read_sf("https://geo.datav.aliyun.com/areas/bound/100000_full.json") %>% select(c(adcode, name, level))
+             map_province <- read_sf("https://geo.datav.aliyun.com/areas_v2/bound/100000_full.json") %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
              tmp <- select(map_province, c(adcode, name_province)) # save adcode and province name
              #十段线
@@ -122,7 +122,7 @@ mymap<- function(code, level = "default"){
            },
            district = {
              # 省级地图
-             map_province <- read_sf("https://geo.datav.aliyun.com/areas/bound/100000_full.json") %>% select(c(adcode, name, level))
+             map_province <- read_sf("https://geo.datav.aliyun.com/areas_v2/bound/100000_full.json") %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
              tmp <- select(map_province, c(adcode, name_province)) # save adcode and province name
              #十段线
@@ -170,7 +170,7 @@ mymap<- function(code, level = "default"){
              map <- map_district
            },
            default = {
-             map_province <- read_sf("https://geo.datav.aliyun.com/areas/bound/100000_full.json") %>% select(c(adcode, name, level))
+             map_province <- read_sf("https://geo.datav.aliyun.com/areas_v2/bound/100000_full.json") %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
              map <- map_province
            }
@@ -178,17 +178,17 @@ mymap<- function(code, level = "default"){
   } else if (substr(code, 3, 4) == "00" & substr(code, 1, 2) %in% c(11, 12, 31, 50, 81, 82) == F)  {
     switch(level,
            province = {
-             map_province <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,".json")) %>% select(c(adcode, name, level))
+             map_province <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,".json")) %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
              map <- map_province
            },
            city = {
-             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_city <- rename(map_city, "name_city" = "name")
              map <- map_city
            },
            district = {
-             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_city <- rename(map_city, "name_city" = "name")
              tmp <- map_city %>% filter(level == "city") %>% select(c(adcode, name_city))
              map_district <- c()
@@ -202,7 +202,7 @@ mymap<- function(code, level = "default"){
              map <- map_district
            },
            default = {
-             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_city <- rename(map_city, "name_city" = "name")
              map <- map_city
            }
@@ -210,19 +210,19 @@ mymap<- function(code, level = "default"){
   } else if (substr(code, 3, 4) == "00" & substr(code, 1, 2) %in% c(11, 12, 31, 50, 81, 82) == T) {
     switch(level,
            province = {
-             map_province <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,".json")) %>% select(c(adcode, name, level))
+             map_province <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,".json")) %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
              map <- map_province},
            city = {
              message("The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.")
            },
            district = {
-             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_district <- rename(map_district, "name_district" = "name")
              map <- map_district
            },
            default = {
-             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_district <- rename(map_district, "name_district" = "name")
              map <- map_district
            }
@@ -233,17 +233,17 @@ mymap<- function(code, level = "default"){
              message("Error argument of level.")
            },
            city = {
-             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,".json")) %>% select(c(adcode, name, level))
+             map_city <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,".json")) %>% select(c(adcode, name, level))
              map_city <- rename(map_city, "name_city" = "name")
              map <- map_city
            },
            district = {
-             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_district <- rename(map_district, "name_district" = "name")
              map <- map_district
            },
            default = {
-             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
+             map_district <- read_sf(paste0("https://geo.datav.aliyun.com/areas_v2/bound/",code,"_full.json")) %>% select(c(adcode, name, level))
              map_district <- rename(map_district, "name_district" = "name")
              map <- map_district
            }
