@@ -1,7 +1,7 @@
 Package: amap
 Type: Package
 Title: An R package using AMap API
-Version: 0.1.3
+Version: 0.1.4
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Description: This R package provides useful map tools for social science research by using the AMap API. In the latest version, you can use it to getting the coordinates for the given addresses, converting the coordinates to the addresses, and calculating the travel distance between different addresses. 
