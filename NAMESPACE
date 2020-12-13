@@ -3,7 +3,7 @@
 export(fetchCoordinate)
 export(fetchDistance)
 export(fetchLocation)
-export(mymap)
+export(fetchMap)
 import(dplyr)
 import(httr)
 import(jsonlite)

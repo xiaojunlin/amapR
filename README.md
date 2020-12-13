@@ -19,7 +19,83 @@ library(amap)
 options(amap.key = 'XXXXXXXXXXX')
 ```
 
+### fetchMap
+
+Using the administrative code, we can fetch data and map at province, city or district level.
+
+```R
+# China map
+# (1) fetch and map at province level
+china1 <- fetchMap(adcode = 100000, level = "province")
+ggplot(china1) +
+ geom_sf(fill = "white") +
+ theme_bw()
+# (2) fetch and map at city level
+china2 <- fetchMap(adcode = 100000,  level = "city")
+ggplot(china2) +
+ geom_sf(fill = "white") +
+ theme_bw()
+# (3) fetch and map at district level
+china3 <- fetchMap(adcode = 100000,  level = "district")
+ggplot(china3) +
+  geom_sf(fill = "white") +
+  theme_bw()
+# (4) fetch and map with missing value in the argment "level"
+china4 <- fetchMap(adcode = 100000)
+ggplot(china4) +
+  geom_sf(fill = "white") +
+  theme_bw()
+
+# Province map
+# (1) fetch and map at province level
+sichuan1 <- fetchMap(adcode = 510000, level = "province")
+ggplot(sichuan1) +
+  geom_sf(fill = "white") +
+  theme_bw()
+# (2) fetch and map at city level
+sichuan2 <- fetchMap(adcode = 510000, level = "city")
+ggplot(sichuan2) +
+  geom_sf(fill = "white") +
+  theme_bw()
+#Note: The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.
+beijing1 <- fetchMap(adcode = 110000, level = "city")
+beijing2 <- fetchMap(adcode = 110000, level = "district")
+ggplot(beijing2) +
+  geom_sf(fill = "white") +
+  theme_bw()
+# (3) fetch and map at district level
+sichuan3 <- fetchMap(adcode = 510000, level = "district")
+ggplot(sichuan3) +
+  geom_sf(fill = "white") +
+  theme_bw()
+# (4) fetch and map with missing value in the argment "level"
+sichuan4 <- fetchMap(adcode = 510000)
+ggplot(sichuan4) +
+  geom_sf(fill = "white") +
+  theme_bw()
+
+# City map
+# (1) fetch and map at city level
+chengdu1 <- fetchMap(adcode = 510100, level = "city")
+ggplot(chengdu1) +
+  geom_sf(fill = "white") +
+  theme_bw()
+# (2) fetch and map at district level
+chengdu2 <- fetchMap(adcode = 510100, level = "district")
+ggplot(chengdu2) +
+  geom_sf(fill = "white") +
+  theme_bw()
+# (3) fetch and map with missing value in the argment "level"
+chengdu3 <- fetchMap(adcode = 510100)
+ggplot(chengdu3) +
+  geom_sf(fill = "white") +
+  theme_bw()
+```
+
+
+
 ### fetchCoordinate
+
 Get the coordinates (longitude and latitude) from the given addresses.
 
 ```R
