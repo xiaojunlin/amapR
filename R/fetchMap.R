@@ -3,7 +3,7 @@
 #' @description Get the map data with sf format
 #' @import sf
 #' @import tidyverse
-#' @param code The administrative code
+#' @param adcode The administrative code
 #' @param level The level of map data, including province, city and district
 #' @return sf data
 #' @export fetchMap

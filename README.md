@@ -21,7 +21,9 @@ options(amap.key = 'XXXXXXXXXXX')
 
 ### fetchMap
 
-Using the administrative code, we can fetch data and map at province, city or district level.
+Using the [administrative code](http://www.mca.gov.cn/article/sj/xzqh/2020/), we can fetch data and map at province, city or district level. The map data is fetched using the JSON API of [DATAV.GeoAtlas](https://datav.aliyun.com/tools/atlas/).
+
+#### (1) China Map
 
 ```R
 # China map
@@ -41,12 +43,21 @@ ggplot(china3) +
   geom_sf(fill = "white") +
   theme_bw()
 # (4) fetch and map with missing value in the argment "level"
-china4 <- fetchMap(adcode = 100000)
+sichuan4 <- fetchMap(adcode = 100000)
 ggplot(china4) +
   geom_sf(fill = "white") +
   theme_bw()
+```
 
-# Province map
+<center class="half">    <img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_china_prov.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_china_city.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_china_district.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_china_missing.png" width="300"/> </center>
+
+
+
+
+
+#### (2) Sichuan Map
+
+```R
 # (1) fetch and map at province level
 sichuan1 <- fetchMap(adcode = 510000, level = "province")
 ggplot(sichuan1) +
@@ -55,12 +66,6 @@ ggplot(sichuan1) +
 # (2) fetch and map at city level
 sichuan2 <- fetchMap(adcode = 510000, level = "city")
 ggplot(sichuan2) +
-  geom_sf(fill = "white") +
-  theme_bw()
-#Note: The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.
-beijing1 <- fetchMap(adcode = 110000, level = "city")
-beijing2 <- fetchMap(adcode = 110000, level = "district")
-ggplot(beijing2) +
   geom_sf(fill = "white") +
   theme_bw()
 # (3) fetch and map at district level
@@ -73,7 +78,15 @@ sichuan4 <- fetchMap(adcode = 510000)
 ggplot(sichuan4) +
   geom_sf(fill = "white") +
   theme_bw()
+```
 
+<center class="half">    <img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_sc_prov.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_sc_city.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_sc_district.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_sc_missing.png" width="300"/> </center>
+
+
+
+#### (3) Chengdu Map
+
+```R
 # City map
 # (1) fetch and map at city level
 chengdu1 <- fetchMap(adcode = 510100, level = "city")
@@ -91,6 +104,8 @@ ggplot(chengdu3) +
   geom_sf(fill = "white") +
   theme_bw()
 ```
+
+<center class="half">    <img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_cd_city.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_cd_district.png" width="300"/><img src="https://github.com/xiaojunlin/amap/raw/master/pic/map_cd_missing.png" width="300"/> </center>
 
 
 
