@@ -5,6 +5,7 @@
 #' @import progress
 #' @import tidyverse
 #' @param address The address
+#' @param n The number of address in each batch
 #' @return a data.frame
 #' @export fetchCoordinate
 #' @examples
@@ -19,21 +20,23 @@
 #'
 #'
 #'
-fetchCoordinate <- function(address){
+fetchCoordinate<- function(address, n = 10){
 
   if (is.null(getOption('amap.key'))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
+
+  if (n > 10 | n <= 0 | is.numeric(n) == F) stop("The argument of n should less than 10 ")
 
   df <- as.data.frame(address)
   dat <- slice(df, 0)
   dat$coordinate <- NULL
 
-  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(seq(1, nrow(df), by = 5)))
+  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(seq(1, nrow(df), by = n)))
   pb$tick(0)
 
-  for (i in seq(1, nrow(df), by = 5)) {
+  for (i in seq(1, nrow(df), by = n)) {
     pb$tick(1)
     try({
-      j = i + 4
+      j = i + n  - 1
       tmp <- df %>% slice(i:j)
       url <- tmp %>% pull(address) %>% paste0(collapse = "|") %>% paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('amap.key'), "&batch=true")
       list <- fromJSON(URLencode(url))

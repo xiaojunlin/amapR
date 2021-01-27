@@ -4,10 +4,12 @@
 \alias{fetchCoordinate}
 \title{fetchCoordinate}
 \usage{
-fetchCoordinate(address)
+fetchCoordinate(address, n = 10)
 }
 \arguments{
 \item{address}{The address}
+
+\item{n}{The number of address in each batch}
 }
 \value{
 a data.frame

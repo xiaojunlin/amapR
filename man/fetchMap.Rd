@@ -7,9 +7,9 @@
 fetchMap(adcode, level = "default")
 }
 \arguments{
-\item{level}{The level of map data, including province, city and district}
+\item{adcode}{The administrative code}
 
-\item{code}{The administrative code}
+\item{level}{The level of map data, including province, city and district}
 }
 \value{
 sf data
