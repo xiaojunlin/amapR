@@ -27,30 +27,23 @@ fetchCoordinate <- function(address){
   dat <- slice(df, 0)
   dat$coordinate <- NULL
 
-  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(seq(1, nrow(df), by = 10)))
+  pb <- progress_bar$new(format = "Processing: [:bar] :percent eta: :eta", total =  length(seq(1, nrow(df), by = 5)))
   pb$tick(0)
 
-  for (i in seq(1, nrow(df), by = 10)) {
+  for (i in seq(1, nrow(df), by = 5)) {
     pb$tick(1)
     try({
-      j = i + 9
+      j = i + 4
       tmp <- df %>% slice(i:j)
-      url <- tmp %>%
-        pull(address) %>%
-        paste0(collapse = "|") %>%
-        paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('amap.key'), "&batch=true")
+      url <- tmp %>% pull(address) %>% paste0(collapse = "|") %>% paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('amap.key'), "&batch=true")
       list <- fromJSON(URLencode(url))
-      list$geocodes %>%
-        as_tibble() %>%
-        select(coordinate = location) %>%
-        bind_cols(tmp, .) -> tmp
+      list$geocodes %>% as_tibble() %>% select(coordinate = location) %>% bind_cols(tmp, .) -> tmp
       tmp$coordinate <- as.character(tmp$coordinate)
       dat <- bind_rows(dat, tmp)
     })
   }
 
-  finaldat <- dat %>%
-    tidyr::separate("coordinate", into = c("longitude", "latitude"), sep = ",") %>%
+  finaldat <- dat %>% tidyr::separate("coordinate", into = c("longitude", "latitude"), sep = ",") %>%
     mutate(longitude = as.numeric(longitude),
            latitude = as.numeric(latitude))
 
