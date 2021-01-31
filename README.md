@@ -4,9 +4,7 @@ An R package using AMap API.
 ## Installation
 
 ```R
-if (!requireNamespace("devtools"))
-  install.packages("devtools")
-  
+if (!requireNamespace("devtools")) install.packages("devtools")
 devtools::install_github("xiaojunlin/amap") 
 ```
 
@@ -122,20 +120,28 @@ fetchCoordinate("四川大学")
 ###############
 # 500 addresses
 ###############
-x <- data.frame(Number= 1:500,
-                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
+dat <- data.frame(Number= 1:500,
+                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", 
+                             "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 
-system.time(z <- fetchCoordinate(x$address))
+# query 10 addresses per batch (up to the query limit in each batch)
+system.time(z <- fetchCoordinate(dat$address)) # n = 10 by default
 #   user   system   elapsed                                                                                                         
-#   1.389  0.100    9.125  
+#   1.389  0.100    9.125
+
+# query 5 addresses per batch (slower but more stable)
+system.time(z <- fetchCoordinate(dat$address, n = 5)) 
+#   user   system   elapsed 
+#   2.560  0.227    18.502
 
 ###################
 # 20,000 addresses
 ###################
-x <- data.frame(Number= 1:20000,
-                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
+dat <- data.frame(Number= 1:20000,
+                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", 
+                             "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
 
-system.time(z <- fetchCoordinate(x$address))
+system.time(z <- fetchCoordinate(dat$address))
 #    user     system    elapsed                                         
 #    51.156   3.293     360.325 
 ```

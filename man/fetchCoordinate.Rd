@@ -9,7 +9,7 @@ fetchCoordinate(address, n = 10)
 \arguments{
 \item{address}{The address}
 
-\item{n}{The number of address in each batch}
+\item{n}{The number of batch query, n = 10 by default}
 }
 \value{
 a data.frame
@@ -19,17 +19,4 @@ get coordinate based on address
 }
 \details{
 Title
-}
-\examples{
-library(amap)
-options(amap.key = "xxxxxxxxxxxxxxxxxx")
-x <- data.frame(Number= 1:500,
-                address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
-
-system.time(z <- fetchCoordinate(x$address))
-
-fetchCoordinate("四川大学")
-
-
-
 }
