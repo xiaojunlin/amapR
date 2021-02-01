@@ -39,7 +39,7 @@ fetchCoordinate<- function(address, n = 10){
       j = i + n - 1
       tmp <- df %>% slice(i:j)
       url <- tmp %>% pull(address) %>% paste0(collapse = "|") %>% paste0("https://restapi.amap.com/v3/geocode/geo?address=", ., "&key=", getOption('amap.key'), "&batch=true")
-      list <- fromJSON(URLencode(url))
+      list <- fromJSON(url)
       list$geocodes %>% as_tibble() %>% select(coordinate = location) %>% bind_cols(tmp, .) -> tmp
       tmp$coordinate <- as.character(tmp$coordinate)
       dat <- bind_rows(dat, tmp)
