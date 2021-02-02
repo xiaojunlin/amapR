@@ -23,5 +23,12 @@ Title
 \examples{
 library(amap)
 options(amap.key = "xxxxxxxxxxxxxxxxxx")
+dgp <- function(n) {
+  address <- data.frame(Number= 1:n,
+                     address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学"))
+return(address)
+}
 
+system.time( z1 <- geocoord(dgp(100)$address) )
+system.time( z2 <- geocoord(dgp(1000)$address) )
 }
