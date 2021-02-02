@@ -1,5 +1,5 @@
 #' Title
-#' @title fetchDistance
+#' @title geodist
 #' @description calculate the distance and travel time between origins and destinations
 #' @import progress
 #' @import dplyr
@@ -13,7 +13,7 @@
 #' @param lat2 the latitude of the destination point
 #' @param type the travel methods (0 = direct distance, 2 = drive car; 3 = walk (only support the distance within 5km))
 #' @return a data frame including origin coordinates, destination coordinates, distance (meters) and travel time (seconds).
-#' @export
+#' @export geodist
 #' @examples
 #' library(amap)
 #' options(amap.key = 'xxxxxxxxxxxxxxxx')
@@ -23,12 +23,12 @@
 #' c = c(104.0652, 104.0652, 104.0652, 104.0652, 104.0652,  104.0652),
 #' d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
 #' )
-#' y <- fetchDistance(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
-#' z <- fetchDistance(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
+#' y <- geodist(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
+#' z <- geodist(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
 #'
 #'
 #'
-fetchDistance <- function(data, lon1, lat1, lon2, lat2, type){
+geodist <- function(data, lon1, lat1, lon2, lat2, type){
   url = "https://restapi.amap.com/v3/distance?parameters"
   header  <- c("User-Agent"="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36")
   payload = list(

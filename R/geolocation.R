@@ -1,6 +1,6 @@
 #' Title
-#' @title fetchLocation
-#' @description fetch location based on longitude and latitude
+#' @title geolocation
+#' @description get location based on longitude and latitude
 #' @import progress
 #' @import dplyr
 #' @import httr
@@ -9,7 +9,7 @@
 #' @param lon the longitude
 #' @param lat the latitude
 #' @return a data frame
-#' @export
+#' @export geolocation
 #' @examples
 #' library(amap)
 #' options(amap.key = 'xxxxxxxxxxxxxxxx')
@@ -19,11 +19,11 @@
 #'     lon = c(116.329,116.495,116.313,NA,6666)
 #'     )
 #'
-#'  address <- fetchLocation(lon = coordinate$lon, lat = coordinate$lat)
-#'  address <- fetchLocation(lon = 104.0665, lat = 30.57227)
+#'  address <- geolocation(lon = coordinate$lon, lat = coordinate$lat)
+#'  address <- geolocation(lon = 104.0665, lat = 30.57227)
 #'
 #'
-fetchLocation <- function(lon, lat){
+geolocation <- function(lon, lat){
   url = "https://restapi.amap.com/v3/geocode/regeo?parameters"
   header = c('User-Agent'= 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36')
   payload = list(
