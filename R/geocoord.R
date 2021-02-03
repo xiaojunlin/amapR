@@ -5,6 +5,7 @@
 #' @import progress
 #' @import dplyr
 #' @import parallel
+#' @import pbapply
 #' @param address The address
 #' @param n The number of batch query, n = 10 by default
 #' @return a data.frame

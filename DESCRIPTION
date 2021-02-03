@@ -20,4 +20,5 @@ Imports:
     dplyr,
     rlist,
     stringr,
-    parallel
+    parallel,
+    pbapply
