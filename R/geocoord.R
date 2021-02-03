@@ -19,7 +19,7 @@
 #' }
 #'
 #' system.time( z1 <- geocoord(dgp(100)$address) )
-#'system.time( z2 <- geocoord(dgp(1000)$address) )
+#' system.time( z2 <- geocoord(dgp(1000)$address) )
 
 geocoord <- function(address, n = 10){
   if (length(address) <= 600){
@@ -79,7 +79,6 @@ geocoord <- function(address, n = 10){
     spldata <- split(address, f = ceiling(seq(length(address)) / n))
     cores <- detectCores()
     cl <- makeCluster(cores)
-    clusterExport(cl, c("address"))
     result = pblapply(
       cl = cl, X = 1:length(spldata),
       FUN = function(i){
