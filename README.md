@@ -58,15 +58,9 @@ system.time(z <- geocoord(dat$address))
 
 When the number of addresses over 600, `geocoord` will use the parallel operation. A progress bar is presented using the `pbapply` package. Theoretically,  the more CPU cores you have, the faster you get the coordinates.
 
-Example: Schools in China
+**Example**: Schools in China
 
-Data source: [The-Location-Data-of-Schools-in-China][https://github.com/pg7go/The-Location-Data-of-Schools-in-China]
-
-
-
-
-
-
+The address data of schools in China was collected from a Github repository named `The-Location-Data-of-Schools-in-China`. [Link][https://github.com/pg7go/The-Location-Data-of-Schools-in-China]
 
 Here is a MacBook Pro with 4 cores:
 
@@ -76,11 +70,10 @@ Here is a MacBook Pro with 4 cores:
 > OS: macOS Big Sur 11.1
 
 ```R
-
-
-###################
-# School data
-###################
+school <- read.csv("https://raw.githubusercontent.com/xiaojunlin/amap/master/data/school.csv")
+system.time( school_coord <- geocoord(school$address) )
+#    user     system    elapsed  
+#    4.967    2.505     157.615
 ```
 
 Here is a Windows PC with 8-core CPU: 
