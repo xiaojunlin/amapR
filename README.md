@@ -67,7 +67,7 @@ system.time(z <- geocoord(dat$address))
 #    2.813    0.968     62.649
 
 ###################
-# 20,000 addresses
+# School data
 ###################
 dat <- data.frame(Number= 1:20000,
                  address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", 
