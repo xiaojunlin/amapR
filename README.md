@@ -43,18 +43,7 @@ system.time(z <- geocoord(dat$address)) # n = 10 by default
 system.time(z <- geocoord(dat$address, n = 5)) 
 #   user   system   elapsed 
 #   2.560  0.227    18.502
-```
 
-When the number of addresses over 600, `geocoord` will use the parallel operation. A progress bar is presented using the `pbapply` package. Theoretically,  the more CPU cores you have, the faster you get the coordinates.
-
-Here is a MacBook Pro with 4 cores:
-
-> MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports)  
-> CPU: Intel Core i5 @ 2.9GHz (4 cores)  
-> RAM: 16GB RAM  
-> OS: macOS Big Sur 11.1
-
-```R
 ###################
 # 10,000 addresses
 ###################
@@ -65,17 +54,33 @@ dat <- data.frame(Number= 1:10000,
 system.time(z <- geocoord(dat$address))
 #    user     system    elapsed                                         
 #    2.813    0.968     62.649
+```
+
+When the number of addresses over 600, `geocoord` will use the parallel operation. A progress bar is presented using the `pbapply` package. Theoretically,  the more CPU cores you have, the faster you get the coordinates.
+
+Example: Schools in China
+
+Data source: [The-Location-Data-of-Schools-in-China][https://github.com/pg7go/The-Location-Data-of-Schools-in-China]
+
+
+
+
+
+
+
+Here is a MacBook Pro with 4 cores:
+
+> MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports)  
+> CPU: Intel Core i5 @ 2.9GHz (4 cores)  
+> RAM: 16GB RAM  
+> OS: macOS Big Sur 11.1
+
+```R
+
 
 ###################
 # School data
 ###################
-dat <- data.frame(Number= 1:20000,
-                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", 
-                             "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
-
-system.time(z <- geocoord(dat$address))
-#    user     system    elapsed                                         
-#    3.230    1.176     106.612 
 ```
 
 Here is a Windows PC with 8-core CPU: 
