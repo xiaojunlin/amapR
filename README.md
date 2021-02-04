@@ -49,9 +49,9 @@ When the number of addresses over 600, `geocoord` will use the parallel operatio
 
 Here is a MacBook Pro with 4 cores:
 
-> MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports)
-> CPU: Intel Core i5 @ 2.9GHz (4 cores)
-> RAM: 16GB RAM
+> MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports)  
+> CPU: Intel Core i5 @ 2.9GHz (4 cores)  
+> RAM: 16GB RAM  
 > OS: macOS Big Sur 11.1
 
 ```R
@@ -80,8 +80,8 @@ system.time(z <- geocoord(dat$address))
 
 Here is a Windows PC with 8-core CPU: 
 
-> CPU: Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz   3.60 GHz (8 cores)
-> RAM: 8.00 GB
+> CPU: Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz   3.60 GHz (8 cores)  
+> RAM: 8.00 GB  
 > OS: Windows 10 Professional (20H2)
 
 ```R
