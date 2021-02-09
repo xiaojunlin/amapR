@@ -62,7 +62,7 @@ When the number of addresses over 600, `geocoord` will use the parallel operatio
 
 The address data of schools in China was collected from a Github repository named `The-Location-Data-of-Schools-in-China`. [Link][https://github.com/pg7go/The-Location-Data-of-Schools-in-China]
 
-Here is a MacBook Pro with 4 cores:
+- MacBook Pro with 4 cores:
 
 > MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports)  
 > CPU: Intel Core i5 @ 2.9GHz (4 cores)  
@@ -76,23 +76,17 @@ system.time( school_coord <- geocoord(school$address) )
 #    4.967    2.505     157.615
 ```
 
-Here is a Windows PC with 8-core CPU: 
+- Windows PC with 8-core CPU: 
 
 > CPU: Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz   3.60 GHz (8 cores)  
 > RAM: 8.00 GB  
 > OS: Windows 10 Professional (20H2)
 
 ```R
-###################
-# 20,000 addresses
-###################
-dat <- data.frame(Number= 1:20000,
-                 address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学", 
-                             "中山大学", "四川大学", "中国科学技术大学", "哈尔滨工业大学", "复旦大学"))
-
-system.time(z <- geocoord(dat$address))
-#    user     system    elapsed                                         
-#    1.95     1.37      68.70
+school <- read.csv("https://raw.githubusercontent.com/xiaojunlin/amap/master/data/school.csv")
+system.time( school_coord <- geocoord(school$address) )
+#    user     system    elapsed  
+#     4.81    4.13      140.65 
 ```
 
 ### geolocation
