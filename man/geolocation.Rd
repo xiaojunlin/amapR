@@ -2,7 +2,7 @@
 % Please edit documentation in R/geolocation.R
 \name{geolocation}
 \alias{geolocation}
-\title{geolocation}
+\title{Converting the coordinates to addresses}
 \usage{
 geolocation(lon, lat)
 }
@@ -15,22 +15,17 @@ geolocation(lon, lat)
 a data frame
 }
 \description{
-get location based on longitude and latitude
-}
-\details{
-Title
+Converting the coordinates to addresses
 }
 \examples{
 library(amap)
-options(amap.key = 'xxxxxxxxxxxxxxxx')
+options(amap.key = "xxxxxxxxxxxxxxxx")
 
-coordinate = data.frame(
-  lat = c(39.934,40.013,40.047,NA,4444),
-    lon = c(116.329,116.495,116.313,NA,6666)
-    )
+coordinate <- data.frame(
+  lat = c(39.934, 40.013, 40.047, NA, 4444),
+  lon = c(116.329, 116.495, 116.313, NA, 6666)
+)
 
- address <- geolocation(lon = coordinate$lon, lat = coordinate$lat)
- address <- geolocation(lon = 104.0665, lat = 30.57227)
-
-
+address <- geolocation(lon = coordinate$lon, lat = coordinate$lat)
+address <- geolocation(lon = 104.0665, lat = 30.57227)
 }

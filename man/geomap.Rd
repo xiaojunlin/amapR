@@ -2,7 +2,7 @@
 % Please edit documentation in R/geomap.R
 \name{geomap}
 \alias{geomap}
-\title{geomap}
+\title{Getting the map data with sf format}
 \usage{
 geomap(adcode, level = "default")
 }
@@ -15,10 +15,7 @@ geomap(adcode, level = "default")
 sf data
 }
 \description{
-Get the map data with sf format
-}
-\details{
-Title
+Getting the map data with sf format
 }
 \examples{
 library(amap)
@@ -28,15 +25,15 @@ options(amap.key = "xxxxxxxxxxxxxxxxxx")
 # (1) fetch and map at province level
 china1 <- geomap(adcode = 100000, level = "province")
 ggplot(china1) +
- geom_sf(fill = "white") +
- theme_bw()
+  geom_sf(fill = "white") +
+  theme_bw()
 # (2) fetch and map at city level
-china2 <- geomap(adcode = 100000,  level = "city")
+china2 <- geomap(adcode = 100000, level = "city")
 ggplot(china2) +
- geom_sf(fill = "white") +
- theme_bw()
+  geom_sf(fill = "white") +
+  theme_bw()
 # (3) fetch and map at district level
-china3 <- geomap(adcode = 100000,  level = "district")
+china3 <- geomap(adcode = 100000, level = "district")
 ggplot(china3) +
   geom_sf(fill = "white") +
   theme_bw()
@@ -57,7 +54,7 @@ sichuan2 <- geomap(adcode = 510000, level = "city")
 ggplot(sichuan2) +
   geom_sf(fill = "white") +
   theme_bw()
-#Note: The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.
+# Note: The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.
 beijing1 <- geomap(adcode = 110000, level = "city")
 beijing2 <- geomap(adcode = 110000, level = "district")
 ggplot(beijing2) +
@@ -90,8 +87,4 @@ chengdu3 <- geomap(adcode = 510100)
 ggplot(chengdu3) +
   geom_sf(fill = "white") +
   theme_bw()
-
-
-
-
 }

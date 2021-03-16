@@ -2,7 +2,7 @@
 % Please edit documentation in R/geocoord.R
 \name{geocoord}
 \alias{geocoord}
-\title{geocoord}
+\title{Converting the addresses to coordinates}
 \usage{
 geocoord(address, n = 10)
 }
@@ -15,20 +15,10 @@ geocoord(address, n = 10)
 a data.frame
 }
 \description{
-get coordinate based on address
-}
-\details{
-Title
+Converting the address to coordinates
 }
 \examples{
 library(amap)
 options(amap.key = "xxxxxxxxxxxxxxxxxx")
-dgp <- function(n) {
-  address <- data.frame(Number= 1:n,
-                     address = c("北京大学", "清华大学", "武汉大学", "华中科技大学", "南京大学"))
-return(address)
-}
-
-system.time( z1 <- geocoord(dgp(100)$address) )
-system.time( z2 <- geocoord(dgp(1000)$address) )
+geocoord("your address in Chinese format")
 }

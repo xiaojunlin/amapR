@@ -2,7 +2,7 @@
 % Please edit documentation in R/geodist.R
 \name{geodist}
 \alias{geodist}
-\title{geodist}
+\title{Calculating the distance and travel time between origins and destinations}
 \usage{
 geodist(data, lon1, lat1, lon2, lat2, type)
 }
@@ -25,21 +25,15 @@ a data frame including origin coordinates, destination coordinates, distance (me
 \description{
 calculate the distance and travel time between origins and destinations
 }
-\details{
-Title
-}
 \examples{
 library(amap)
-options(amap.key = 'xxxxxxxxxxxxxxxx')
+options(amap.key = "xxxxxxxxxxxxxxxx")
 x <- data.frame(
-a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890,  NA),
-b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145,  NA),
-c = c(104.0652, 104.0652, 104.0652, 104.0652, 104.0652,  104.0652),
-d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
+  a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890, NA),
+  b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145, NA),
+  c = c(104.0652, 104.0652, 104.0652, 104.0652, 104.0652, 104.0652),
+  d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851, 30.57851)
 )
-y <- geodist(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
-z <- geodist(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
-
-
-
+y <- geodist(data = x, lon1 = "a", lat1 = "b", lon2 = "c", lat2 = "d", type = 0)
+z <- geodist(data = x, lon1 = "a", lat1 = "b", lon2 = "c", lat2 = "d", type = 1)
 }
