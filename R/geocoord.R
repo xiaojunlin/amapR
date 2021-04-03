@@ -13,14 +13,18 @@
 #' library(amap)
 #' options(amap.key = "xxxxxxxxxxxxxxxxxx")
 #' geocoord("your address in Chinese format")
-trim_address <- function(x){
-  x <- gsub("#", "", x)
-  x <- gsub(">", "", x)
-  x <- gsub("\s", "", x)
-  return(x)
-}
+
+
 
 geocoord <- function(address, n = 10) {
+
+  trim_address <- function(x){
+    x <- gsub("#", "", x)
+    x <- gsub(">", "", x)
+    x <- gsub("\\s", "", x)
+    return(x)
+  }
+
   if (length(address) <= 500) {
     query1 <- function(address, n = 10) {
       if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
