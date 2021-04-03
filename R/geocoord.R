@@ -13,8 +13,15 @@
 #' library(amap)
 #' options(amap.key = "xxxxxxxxxxxxxxxxxx")
 #' geocoord("your address in Chinese format")
+trim_address <- function(x){
+  x <- gsub("#", "", x)
+  x <- gsub(">", "", x)
+  x <- gsub("\s", "", x)
+  return(x)
+}
+
 geocoord <- function(address, n = 10) {
-  if (length(address) <= 600) {
+  if (length(address) <= 500) {
     query1 <- function(address, n = 10) {
       if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
       key <- getOption("amap.key")
@@ -29,9 +36,9 @@ geocoord <- function(address, n = 10) {
           j <- i + n - 1
           tmp <- slice(df, i:j)
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?",
-                        "key=", key,
-                        "&batch=true",
-                        "&address=", paste0(pull(tmp, address), collapse = "|"))
+                        "key=", key, "&batch=true",
+                        "&address=", trim_address(paste0(pull(tmp, address), collapse = "|"))
+                        )
           list <- fromJSON(url)
           geocodes <- as.data.frame(list$geocodes)
           coord <- select(geocodes, coordinate = location)
@@ -58,9 +65,9 @@ geocoord <- function(address, n = 10) {
           j <- i + n - 1
           tmp <- slice(df, i:j)
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?",
-                        "key=", key,
-                        "&batch=true",
-                        "&address=", paste0(pull(tmp, address), collapse = "|"))
+                        "key=", key, "&batch=true",
+                        "&address=", trim_address(paste0(pull(tmp, address), collapse = "|"))
+                        )
           list <- fromJSON(url)
           geocodes <- as.data.frame(list$geocodes)
           coord <- select(geocodes, coordinate = location)
