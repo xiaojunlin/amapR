@@ -61,6 +61,7 @@ geocoord <- function(address, n = 10) {
                         "key=", key,
                         "&batch=true",
                         "&address=", paste0(pull(tmp, address), collapse = "|"))
+          list <- fromJSON(url)
           geocodes <- as.data.frame(list$geocodes)
           coord <- select(geocodes, coordinate = location)
           tmp <- bind_cols(tmp, coord)
