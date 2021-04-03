@@ -29,7 +29,7 @@ geocoord <- function(address, n = 10) {
           j <- i + n - 1
           tmp <- slice(df, i:j)
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?",
-                        "key=023b7a9251e3b5a0eee9027acd9a4576",
+                        "key=", key,
                         "&batch=true",
                         "&address=", paste0(pull(tmp, address), collapse = "|"))
           list <- fromJSON(url)
@@ -58,7 +58,7 @@ geocoord <- function(address, n = 10) {
           j <- i + n - 1
           tmp <- slice(df, i:j)
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?",
-                        "key=023b7a9251e3b5a0eee9027acd9a4576",
+                        "key=", key,
                         "&batch=true",
                         "&address=", paste0(pull(tmp, address), collapse = "|"))
           geocodes <- as.data.frame(list$geocodes)
