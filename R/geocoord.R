@@ -23,8 +23,6 @@ geocoord <- function(address, n = 10) {
     return(x)
   }
 
-  vars_list <-  c('location','formatted_address', 'country', 'province', 'city',
-                  'district', 'township', 'street', 'number', 'citycode', 'adcode')
 
   if (length(address) <= 500) {
     query1 <- function(address, n = 10) {
@@ -58,6 +56,8 @@ geocoord <- function(address, n = 10) {
                         "&address=", trim_address(paste0(pull(tmp, address), collapse = "|"))
           )
           list <- fromJSON(url)
+          vars_list <-  c('location','formatted_address', 'country', 'province', 'city',
+                          'district', 'township', 'street', 'number', 'citycode', 'adcode')
           geocode <- list$geocodes %>% select(vars_list)
           # replace character(0) and list() with NA
           for (i in vars_list) {
@@ -108,6 +108,8 @@ geocoord <- function(address, n = 10) {
                         "&address=", trim_address(paste0(pull(tmp, address), collapse = "|"))
           )
           list <- fromJSON(url)
+          vars_list <-  c('location','formatted_address', 'country', 'province', 'city',
+                          'district', 'township', 'street', 'number', 'citycode', 'adcode')
           geocode <- list$geocodes %>% select(vars_list)
           # replace character(0) and list() with NA
           for (i in vars_list) {
