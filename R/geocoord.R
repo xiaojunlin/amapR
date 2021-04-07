@@ -23,6 +23,9 @@ geocoord <- function(address, n = 10) {
     return(x)
   }
 
+  vars_list <-  c('location','formatted_address', 'country', 'province', 'city',
+                  'district', 'township', 'street', 'number', 'citycode', 'adcode')
+
   if (length(address) <= 500) {
     query1 <- function(address, n = 10) {
       if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
