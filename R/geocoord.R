@@ -94,7 +94,7 @@ geocoord <- function(address) {
 #    cores <- detectCores()
 #    cl <- makeCluster(cores)
 #    plan(cluster, workers = cl)
-    plan(multisession)
+    plan(sequential)
     xs <- seq_len(length(spldata))
     handlers(handler_progress(format="[:bar] :percent :eta :message"))
     with_progress({
