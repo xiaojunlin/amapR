@@ -19,13 +19,10 @@
 #' geocoord("address in Chinese format")
 
 geocoord <- function(address) {
-
   vars_list <-  c('location','formatted_address', 'country', 'province', 'city',
                   'district', 'township', 'street', 'number', 'citycode', 'adcode')
-
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
   key <- getOption("amap.key")
-
   if (length(address) <= 500) {
     query1 <- function(address) {
       df <- as.data.frame(address)
@@ -35,7 +32,7 @@ geocoord <- function(address) {
       for (i in seq(1, nrow(df), by = 10)) {
         pb$tick(1)
         try({
-          j <- i + 9
+          j <- min(i + 9, nrow(df))
           tmp <- slice(df, i:j)
           tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>% as.data.frame()
           colnames(tmp_trim) <- "address"
@@ -72,10 +69,9 @@ geocoord <- function(address) {
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = "|"))
           list <- fromJSON(url)
-          if (nrow(df) == 1 & identical(list(), list$geocodes) == TRUE) {
-            geocode <- data.frame(location = NA, formatted_address = NA,  country = NA,  province = NA,
-                                  city = NA, district = NA, township = NA, street = NA,  number = NA,
-                                  citycode = NA, adcode = NA)
+          if (identical(list(), list$geocodes) == TRUE) {
+            geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
+            colnames(x)<- vars_list
           } else {
             geocode <- list$geocodes %>% select(all_of(vars_list))
             for (k in vars_list) {
