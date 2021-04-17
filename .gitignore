@@ -42,3 +42,6 @@ vignettes/*.pdf
 # Benckmarking file
 benckmarking.R
 fetchCoordinate.R
+
+# Folders
+/archive/

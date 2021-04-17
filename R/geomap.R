@@ -1,7 +1,7 @@
 #' @title Getting the map data with sf format
 #' @description Getting the map data with sf format
 #' @import sf
-#' @import tidyverse
+#' @import dplyr
 #' @param adcode The administrative code
 #' @param level The level of map data, including province, city and district
 #' @return sf data
@@ -43,7 +43,7 @@
 #' ggplot(sichuan2) +
 #'   geom_sf(fill = "white") +
 #'   theme_bw()
-#' # Note: The argument of level is not allowed for the municipality or special administrative region, please use 'level = district'.
+#'
 #' beijing1 <- geomap(adcode = 110000, level = "city")
 #' beijing2 <- geomap(adcode = 110000, level = "district")
 #' ggplot(beijing2) +

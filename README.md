@@ -56,67 +56,10 @@ system.time(z <- geocoord(dat$address))
 #    2.813    0.968     62.649
 ```
 
-When the number of addresses over 600, `geocoord` will use the parallel operation. A progress bar is presented using the `pbapply` package. Theoretically,  the more CPU cores you have, the faster you get the coordinates.
+When the number of addresses over 500, `geocoord` will use the parallel operation. Theoretically,  the more CPU cores you have, the faster you get the coordinates.
 
-**Example**: Schools in China
 
-The address data of schools in China was collected from a Github repository named `The-Location-Data-of-Schools-in-China`. [Link][https://github.com/pg7go/The-Location-Data-of-Schools-in-China]
 
-- MacBook Pro with 4 cores:
-
-> MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports)  
-> CPU: Intel Core i5 @ 2.9GHz (4 cores)  
-> RAM: 16GB RAM  
-> OS: macOS Big Sur 11.1
-
-```R
-school <- read.csv("https://raw.githubusercontent.com/xiaojunlin/amap/master/data/school.csv")
-system.time( school_coord <- geocoord(school$address) )
-#    user     system    elapsed  
-#    4.967    2.505     157.615
-```
-
-- Windows PC with 8-core CPU: 
-
-> CPU: Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz   3.60 GHz (8 cores)  
-> RAM: 8.00 GB  
-> OS: Windows 10 Professional (20H2)
-
-```R
-school <- read.csv("https://raw.githubusercontent.com/xiaojunlin/amap/master/data/school.csv")
-system.time( school_coord <- geocoord(school$address) )
-#    user     system    elapsed  
-#     4.81    4.13      140.65 
-```
-
-### geolocation
-
-Get the addresses from the given coordinates.
-
-```R
-coordinate = data.frame(
-      lat = c(39.934,40.013,40.047,NA,4444),
-      lon = c(116.329,116.495,116.313,NA,6666)
-    )
-
-address <- geolocation(lon = coordinate$lon, lat = coordinate$lat)
-address <- geolocation(lon = 104.0665, lat = 30.57227)
-```
-
-### geodist
-Calculate the travel distance and travel time between origins and destinations. There are three travel ways, including the straight line distancee (type = 0), driving (type = 1) and walking (type = 2). The returned results are travel distance (unit: meter) and travel time (unit: second, only for driving and walking).
-
-```R
-x <- data.frame(
-  a = c(104.0141, 104.0518, 104.0644, 104.0390, 104.1890,  NA),
-  b = c(30.66794, 30.64201, 30.64035, 30.66362, 30.65145,  NA),
-  c = c(104.0652, 104.0652, 104.0652, 104.0652, 104.0652,  104.0652),
-  d = c(30.57851, 30.57851, 30.57851, 30.57851, 30.57851,  30.57851)
-  )
-
-y <- geodist(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 0)
-z <- geodist(data = x, lon1 = "a" , lat1 = "b", lon2 = "c", lat2 ="d", type = 1)
-```
 
 ### geomap
 

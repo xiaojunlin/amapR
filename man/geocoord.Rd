@@ -4,15 +4,13 @@
 \alias{geocoord}
 \title{Converting the addresses to coordinates}
 \usage{
-geocoord(address, n = 10)
+geocoord(address)
 }
 \arguments{
 \item{address}{The address}
-
-\item{n}{The number of batch query, n = 10 by default}
 }
 \value{
-a data.frame
+data.table
 }
 \description{
 Converting the address to coordinates
@@ -20,5 +18,5 @@ Converting the address to coordinates
 \examples{
 library(amap)
 options(amap.key = "xxxxxxxxxxxxxxxxxx")
-geocoord("your address in Chinese format")
+geocoord("address in Chinese format")
 }
