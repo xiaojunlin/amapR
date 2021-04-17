@@ -12,6 +12,7 @@ Imports:
     progressr,
     future,
     future.apply,
+    parallel,
     magrittr,
     jsonlite,
     dplyr,

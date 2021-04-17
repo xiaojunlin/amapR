@@ -9,6 +9,7 @@
 #' @import dplyr
 #' @import tidyr
 #' @import stringr
+#' @import parallel
 #' @param address The address
 #' @return data.table
 #' @export geocoord
