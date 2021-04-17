@@ -65,7 +65,6 @@ geocoord <- function(address) {
     query2 <- function(address) {
       df <- as.data.frame(address)
       dat <- slice(df, 0)
-      for (i in seq(1, nrow(df), by = n)) {
         try({
           tmp <- slice(df, 1:nrow(df))
           tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>% as.data.frame()
@@ -91,7 +90,6 @@ geocoord <- function(address) {
           tmp <- bind_cols(tmp, geocode) %>% mutate_all(as.character)
           dat <- bind_rows(dat, tmp)
         })
-      }
       result <- separate(dat, "location", into = c("longitude", "latitude"), sep = ",") %>%
         mutate_at(c("longitude", "latitude"), as.numeric)
       return(result)
