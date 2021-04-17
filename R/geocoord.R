@@ -91,9 +91,10 @@ geocoord <- function(address) {
       return(result)
     }
     spldata <- split(address, f = ceiling(seq(length(address)) / 10))
-    cores <- detectCores()
-    cl <- makeCluster(cores)
-    plan(cluster, workers = cl)
+#    cores <- detectCores()
+#    cl <- makeCluster(cores)
+#    plan(cluster, workers = cl)
+    plan(multisession)
     xs <- seq_len(length(spldata))
     handlers(handler_progress(format="[:bar] :percent :eta :message"))
     with_progress({
