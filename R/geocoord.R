@@ -69,7 +69,7 @@ geocoord <- function(address) {
           list <- fromJSON(url)
           if (identical(list(), list$geocodes) == TRUE) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
-            colnames(geocode)<- vars_list
+            colnames(geocode) <- vars_list
           } else {
             geocode <- list$geocodes %>% select(all_of(vars_list))
             for (k in vars_list) {
@@ -94,8 +94,7 @@ geocoord <- function(address) {
     result <- pblapply(
       cl = cl, X = seq_len(length(spldata)),
       FUN = function(i) {
-        result <- query2(unlist(spldata[[i]]))
-        return(result)
+        query2(unlist(spldata[[i]]))
       }
     )
     results <- bind_rows(result) %>% as.data.table()
