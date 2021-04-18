@@ -25,7 +25,7 @@ geocoord <- function(address) {
       df <- as.data.frame(address)
       colnames(df) <- "address"
       dat <- slice(df, 0)
-      pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 10)))
+      pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 9)))
       pb$tick(0)
       for (i in seq(1, nrow(df), by = 9)) {
         pb$tick(1)
