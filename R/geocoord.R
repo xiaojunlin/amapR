@@ -23,6 +23,7 @@ geocoord <- function(address) {
   if (length(address) <= 500) {
     query1 <- function(address) {
       df <- as.data.frame(address)
+      colnames(df) <- "address"
       dat <- slice(df, 0)
       pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 10)))
       pb$tick(0)
@@ -62,6 +63,7 @@ geocoord <- function(address) {
   } else {
     query2 <- function(address) {
       df <- as.data.frame(address)
+      colnames(df) <- "address"
       dat <- slice(df, 0)
         try({
           tmp <- slice(df, 1:nrow(df))
