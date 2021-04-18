@@ -57,6 +57,9 @@ geocoord <- function(address) {
       }
       results <- separate(dat, "location", into = c("longitude", "latitude"), sep = ",") %>%
         mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
+      succ_rate <- (nrow(results) - sum(is.na(results$longitude)))/nrow(results)*100
+      fail_rate <- (sum(is.na(results$longitude)))/nrow(results)*100
+      print(paste0("[Report] ", "Success rate:", succ_rate, "%  |  ", "Fail rate:", fail_rate, "%"))
       return(results)
     }
     query1(address)
@@ -101,7 +104,13 @@ geocoord <- function(address) {
     results <- bind_rows(result)
     results <- separate(results, "location", into = c("longitude", "latitude"), sep = ",") %>%
       mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
+    succ_rate <- (nrow(results) - sum(is.na(results$longitude)))/nrow(results)*100
+    fail_rate <- (sum(is.na(results$longitude)))/nrow(results)*100
+    print(paste0("[Report] ", "Success rate:", succ_rate, "%  |  ", "Fail rate:", fail_rate, "%"))
+
     return(results)
     stopCluster(cl)
+    # Print results
+
   }
 }
