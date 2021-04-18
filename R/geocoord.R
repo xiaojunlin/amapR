@@ -36,15 +36,19 @@ geocoord <- function(address) {
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = "|"))
           list <- fromJSON(url)
-          geocode <- list$geocodes %>% select(all_of(vars_list))
-          # replace character(0) and list() with NA
-          for (k in vars_list) {
-            geocode[[k]] <- lapply(geocode[[k]],function(x) {
-              if(identical(x, character(0))) NA_character_ else x
-            })
-            geocode[[k]] <- lapply(geocode[[k]],function(x) {
-              if(identical(x, list())) NA_character_ else x
-            })
+          if (identical(list(), list$geocodes) == TRUE) {
+            geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
+            colnames(geocode) <- vars_list
+          } else {
+            geocode <- list$geocodes %>% select(all_of(vars_list))
+            for (k in vars_list) {
+              geocode[[k]] <- lapply(geocode[[k]],function(x) {
+                if(identical(x, character(0))) NA_character_ else x
+              })
+              geocode[[k]] <- lapply(geocode[[k]],function(x) {
+                if(identical(x, list())) NA_character_ else x
+              })
+            }
           }
           tmp <- bind_cols(tmp, geocode) %>% mutate_all(as.character)
           dat <- bind_rows(dat, tmp)
