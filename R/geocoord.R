@@ -32,7 +32,7 @@ geocoord <- function(address) {
         try({
           j <- min(i + 9, nrow(df))
           tmp <- slice(df, i:j)
-          tmp_trim <- str_replace_all(tmp$address, c("[^[:alnum:]]", "[a-z]", "[A-Z"), "_") %>% as.data.frame()
+          tmp_trim <- str_replace_all(tmp$address, c("[^[:alnum:]]", "[a-z]", "[A-Z]"), "_") %>% as.data.frame()
           colnames(tmp_trim) <- "address"
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
@@ -70,7 +70,7 @@ geocoord <- function(address) {
       dat <- slice(df, 0)
         try({
           tmp <- slice(df, 1:nrow(df))
-          tmp_trim <- str_replace_all(tmp$address, c("[^[:alnum:]]", "[a-z]", "[A-Z"), "_") %>% as.data.frame()
+          tmp_trim <- str_replace_all(tmp$address, c("[^[:alnum:]]", "[a-z]", "[A-Z]"), "_") %>% as.data.frame()
           colnames(tmp_trim) <- "address"
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
