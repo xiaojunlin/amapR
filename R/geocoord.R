@@ -20,17 +20,17 @@ geocoord <- function(address) {
   vars_list <- c('location','formatted_address')
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
   key <- getOption("amap.key")
-  if (length(address) <= 500) {
+  if (length(address) <= 200) {
     query1 <- function(address) {
       df <- as.data.frame(address)
       colnames(df) <- "address"
       dat <- slice(df, 0)
-      pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 9)))
+      pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 10)))
       pb$tick(0)
-      for (i in seq(1, nrow(df), by = 9)) {
+      for (i in seq(1, nrow(df), by = 10)) {
         pb$tick(1)
         try({
-          j <- min(i + 8, nrow(df))
+          j <- min(i + 9, nrow(df))
           tmp <- slice(df, i:j)
           tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>% as.data.frame()
           colnames(tmp_trim) <- "address"
@@ -89,11 +89,8 @@ geocoord <- function(address) {
           tmp <- bind_cols(tmp, geocode) %>% mutate_all(as.character)
           dat <- bind_rows(dat, tmp)
         })
-      result <- separate(dat, "location", into = c("longitude", "latitude"), sep = ",") %>%
-        mutate_at(c("longitude", "latitude"), as.numeric)
-      return(result)
     }
-    spldata <- split(address, f = ceiling(seq(length(address)) / 9))
+    spldata <- split(address, f = ceiling(seq(length(address))/10))
     cores <- detectCores()
     cl <- makeCluster(cores)
     result <- pblapply(
@@ -102,7 +99,9 @@ geocoord <- function(address) {
         query2(unlist(spldata[[i]]))
       }
     )
-    results <- bind_rows(result) %>% as.data.table()
+    results <- bind_rows(result)
+    results <- separate(results, "location", into = c("longitude", "latitude"), sep = ",") %>%
+      mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
     return(results)
     stopCluster(cl)
   }
