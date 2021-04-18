@@ -3,13 +3,11 @@
 #' @importFrom data.table as.data.table
 #' @import jsonlite
 #' @import progress
-#' @import progressr
-#' @import future
-#' @import future.apply
+#' @import parallel
+#' @import pbapply
 #' @import dplyr
 #' @import tidyr
 #' @import stringr
-#' @import parallel
 #' @param address The address
 #' @return data.table
 #' @export geocoord
@@ -90,20 +88,18 @@ geocoord <- function(address) {
         mutate_at(c("longitude", "latitude"), as.numeric)
       return(result)
     }
-    spldata <- split(address, f = ceiling(seq(length(address)) / 10))
+    spldata <- split(address, f = ceiling(seq(length(address)) / n))
     cores <- detectCores()
     cl <- makeCluster(cores)
-    plan(cluster, workers = cl)
-    xs <- seq_len(length(spldata))
-    handlers(handler_progress(format="[:bar] :percent :eta :message"))
-    with_progress({
-      p <- progressor(along = xs)
-      result <- future_lapply(xs, FUN = function(x){
-        p()
-        query2(unlist(spldata[[x]]))
-      })
-    })
+    result <- pblapply(
+      cl = cl, X = seq_len(length(spldata)),
+      FUN = function(i) {
+        result <- query2(unlist(spldata[[i]]))
+        return(result)
+      }
+    )
     results <- bind_rows(result) %>% as.data.table()
     return(results)
+    stopCluster(cl)
   }
 }
