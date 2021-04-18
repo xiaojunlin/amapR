@@ -37,7 +37,7 @@ geocoord <- function(address) {
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
           list <- fromJSON(url)
-          if (identical(list(), list$geocodes) == TRUE | sum(vars_list %in% colnames(list$geocodes)) < 2 ) {
+          if (identical(list(), list$geocodes) == TRUE) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
             colnames(geocode) <- vars_list
           } else {
@@ -55,9 +55,9 @@ geocoord <- function(address) {
           dat <- bind_rows(dat, tmp)
         })
       }
-      result <- separate(dat, "location", into = c("longitude", "latitude"), sep = ",") %>%
+      results <- separate(dat, "location", into = c("longitude", "latitude"), sep = ",") %>%
         mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
-      return(result)
+      return(results)
     }
     query1(address)
   } else {
@@ -72,7 +72,7 @@ geocoord <- function(address) {
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
           list <- fromJSON(url)
-          if (identical(list(), list$geocodes) == TRUE | sum(vars_list %in% colnames(list$geocodes)) < 2 ) {
+          if (identical(list(), list$geocodes) == TRUE) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
             colnames(geocode) <- vars_list
           } else {
