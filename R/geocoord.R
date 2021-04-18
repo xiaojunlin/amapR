@@ -89,16 +89,15 @@ geocoord <- function(address) {
           tmp <- bind_cols(tmp, geocode) %>% mutate_all(as.character)
           dat <- bind_rows(dat, tmp)
         })
+      return(dat)
     }
     spldata <- split(address, f = ceiling(seq(length(address))/10))
     cores <- detectCores()
     cl <- makeCluster(cores)
-    result <- pblapply(
-      cl = cl, X = seq_len(length(spldata)),
-      FUN = function(i) {
-        query2(unlist(spldata[[i]]))
-      }
-    )
+    result <- pblapply(cl = cl, X = seq_len(length(spldata)),
+                       FUN = function(i) {
+                         query2(unlist(spldata[[i]]))
+                         })
     results <- bind_rows(result)
     results <- separate(results, "location", into = c("longitude", "latitude"), sep = ",") %>%
       mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
