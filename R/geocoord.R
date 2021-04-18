@@ -88,7 +88,7 @@ geocoord <- function(address) {
         mutate_at(c("longitude", "latitude"), as.numeric)
       return(result)
     }
-    spldata <- split(address, f = ceiling(seq(length(address)) / n))
+    spldata <- split(address, f = ceiling(seq(length(address)) / 10))
     cores <- detectCores()
     cl <- makeCluster(cores)
     result <- pblapply(
