@@ -27,15 +27,15 @@ geocoord <- function(address) {
       dat <- slice(df, 0)
       pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 10)))
       pb$tick(0)
-      for (i in seq(1, nrow(df), by = 10)) {
+      for (i in seq(1, nrow(df), by = 9)) {
         pb$tick(1)
         try({
-          j <- min(i + 9, nrow(df))
+          j <- min(i + 8, nrow(df))
           tmp <- slice(df, i:j)
           tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>% as.data.frame()
           colnames(tmp_trim) <- "address"
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
-                        "&address=", paste0(pull(tmp_trim, address), collapse = "|"))
+                        "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
           list <- fromJSON(url)
           if (identical(list(), list$geocodes) == TRUE | sum(vars_list %in% colnames(list$geocodes)) < 2 ) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
@@ -70,7 +70,7 @@ geocoord <- function(address) {
           tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>% as.data.frame()
           colnames(tmp_trim) <- "address"
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
-                        "&address=", paste0(pull(tmp_trim, address), collapse = "|"))
+                        "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
           list <- fromJSON(url)
           if (identical(list(), list$geocodes) == TRUE | sum(vars_list %in% colnames(list$geocodes)) < 2 ) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
@@ -93,7 +93,7 @@ geocoord <- function(address) {
         mutate_at(c("longitude", "latitude"), as.numeric)
       return(result)
     }
-    spldata <- split(address, f = ceiling(seq(length(address)) / 10))
+    spldata <- split(address, f = ceiling(seq(length(address)) / 9))
     cores <- detectCores()
     cl <- makeCluster(cores)
     result <- pblapply(
