@@ -17,7 +17,7 @@
 #' geocoord("address in Chinese format")
 
 geocoord <- function(address) {
-  vars_list <-  c('location','formatted_address')
+  vars_list <- c('location','formatted_address')
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
   key <- getOption("amap.key")
   if (length(address) <= 500) {
@@ -36,7 +36,7 @@ geocoord <- function(address) {
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = "|"))
           list <- fromJSON(url)
-          if (identical(list(), list$geocodes) == TRUE) {
+          if (identical(list(), list$geocodes) == TRUE | sum(vars_list %in% colnames(list$geocodes)) < 2 ) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
             colnames(geocode) <- vars_list
           } else {
@@ -70,7 +70,7 @@ geocoord <- function(address) {
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
                         "&address=", paste0(pull(tmp_trim, address), collapse = "|"))
           list <- fromJSON(url)
-          if (identical(list(), list$geocodes) == TRUE) {
+          if (identical(list(), list$geocodes) == TRUE | sum(vars_list %in% colnames(list$geocodes)) < 2 ) {
             geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
             colnames(geocode) <- vars_list
           } else {
