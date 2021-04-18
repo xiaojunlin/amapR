@@ -33,8 +33,6 @@ geocoord <- function(address) {
           j <- min(i + 9, nrow(df))
           tmp <- slice(df, i:j)
           tmp_trim <- str_replace_all(tmp$XZZ, "[^[:alnum:]]", "_") %>%
-            str_replace_all("[a-z]", "_") %>%
-            str_replace_all("[A-Z]", "_") %>%
             as.data.frame()
           colnames(tmp_trim) <- "address"
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
@@ -74,8 +72,6 @@ geocoord <- function(address) {
         try({
           tmp <- slice(df, 1:nrow(df))
           tmp_trim <- str_replace_all(tmp$XZZ, "[^[:alnum:]]", "_") %>%
-            str_replace_all("[a-z]", "_") %>%
-            str_replace_all("[A-Z]", "_") %>%
             as.data.frame()
           colnames(tmp_trim) <- "address"
           url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
