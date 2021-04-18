@@ -32,7 +32,7 @@ geocoord <- function(address) {
         try({
           j <- min(i + 9, nrow(df))
           tmp <- slice(df, i:j)
-          tmp_trim <- stringr::str_replace_all(tmp$XZZ, "[^[:alnum:]]", "_") %>%
+          tmp_trim <- str_replace_all(tmp$XZZ, "[^[:alnum:]]", "_") %>%
             str_replace_all("[a-z]", "_") %>%
             str_replace_all("[A-Z]", "_") %>%
             as.data.frame()
@@ -73,7 +73,7 @@ geocoord <- function(address) {
       dat <- slice(df, 0)
         try({
           tmp <- slice(df, 1:nrow(df))
-          tmp_trim <- stringr::str_replace_all(tmp$XZZ, "[^[:alnum:]]", "_") %>%
+          tmp_trim <- str_replace_all(tmp$XZZ, "[^[:alnum:]]", "_") %>%
             str_replace_all("[a-z]", "_") %>%
             str_replace_all("[A-Z]", "_") %>%
             as.data.frame()
