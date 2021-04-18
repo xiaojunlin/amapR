@@ -17,8 +17,7 @@
 #' geocoord("address in Chinese format")
 
 geocoord <- function(address) {
-  vars_list <-  c('location','formatted_address', 'country', 'province', 'city',
-                  'district', 'township', 'street', 'number', 'citycode', 'adcode')
+  vars_list <-  c('location','formatted_address')
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
   key <- getOption("amap.key")
   if (length(address) <= 500) {
