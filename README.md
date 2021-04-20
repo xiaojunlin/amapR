@@ -64,7 +64,7 @@ user     system    elapsed
 1.044    0.344     64.697   
 ```
 
-Here is the result.
+Here is the retured result in `data.table` format.
 
 ```R
 result
@@ -84,9 +84,7 @@ result
 1000: 1000 北京大学       北京市海淀区北京大学  116.3083 39.99530
 ```
 
-- Theoratically, the more CPU cores you have, the faster the `geocoord` function will be. However, the Amap have set the [query limit](https://lbs.amap.com/api/webservice/guide/tools/flowlevel) (200 times per second for personal certified developer). So, for personal certified developer, I would not recommend you to use too much CPU cores (maybe 20 cores is the upper limit). 
-
-- To test the speed of `geocoord` function, we have queryed **100,000** addresses in the following two different platforms. The Windows with more CPU cores is faster than the macOS (**260**s vs **629**s).
+- Theoratically, the more CPU cores you have, the faster the `geocoord` function will be. To compare the speed of `geocoord` function, we have queryed **100,000** addresses in the following two different platforms. The results shown that the Windows with more CPU cores is faster than the macOS (**260**s vs **629**s).
 
 > **macOS**: 2.9GHz Intel Core i5 (2 cores and 4 threads) , 16 GB memory
 
@@ -114,4 +112,31 @@ system.time( result <- geocoord(data = test, address = "address") )
 Success rate:100% | Failure rate:0%
 user     system    elapsed
 4.93     0.58      260.27   
+```
+However, the Amap have set the [query limit](https://lbs.amap.com/api/webservice/guide/tools/flowlevel) (200 times per second for personal certified developer). For personal certified developer, I would not recommend you to use too many CPU cores. To avoid http error, you can set the number of CPU cores used in the fucntion using `ncore` argument. 
+
+For example:
+
+> 2 CPU cores
+
+```R
+test <- data.frame(n = 1:3000, address = c("北京大学", "四川大学"))
+system.time( result <- geocoord(data = test, address = "address", ncore = 2) )
+```
+```R
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user     system    elapsed
+0.09     0.01      28.25 
+```
+> 4 CPU cores
+```R
+test <- data.frame(n = 1:3000, address = c("北京大学", "四川大学"))
+system.time( result <- geocoord(data = test, address = "address", ncore = 4) )
+```
+```R
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user     system    elapsed
+0.19     0.03      14.48 
 ```
