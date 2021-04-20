@@ -32,24 +32,20 @@ geocoord <- function(data, address) {
     query1 <- function(data, address) {
       df <- as.data.table(data)
       dat <- data.table()
-      pb <- progress_bar$new(format = "[:bar] :percent", total = length(seq(1, df[,.N], by = 10)),
-                             complete = ":", incomplete = " ", current = " ", clear = F, width = 70)
-      pb$tick(0)
+      pb <- txtProgressBar(max = ceiling(df[,.N]/10), style = 3, char = ":", width = 70)
       for (i in seq(1, df[,.N], by = 10)) {
-        pb$tick(1)
-        try({
-          j <- min(i + 9, df[,.N])
-          tmp <- df[i:j, ][, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
-          url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
-          list <- fromJSON(url)
-          if (identical(list(), list$geocodes) == TRUE) {
-            geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
-          } else {
-            geocode <- as.data.table(list$geocodes)[,.(location, formatted_address)][location %in% c('character(0)'), location:=NA][formatted_address %in% c('character(0)'), formatted_address:=NA]
-          }
-          tmp <- cbind(tmp, geocode)[,trim_addr:= NULL]
-          dat <- rbind(dat, tmp)
-        })
+        j <- min(i + 9, df[,.N])
+        tmp <- df[i:j, ][, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
+        url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
+        list <- fromJSON(url)
+        if (identical(list(), list$geocodes) == TRUE) {
+          geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
+        } else {
+          geocode <- as.data.table(list$geocodes)[,.(location, formatted_address)][location %in% c('character(0)'), location:=NA][formatted_address %in% c('character(0)'), formatted_address:=NA]
+        }
+        tmp <- cbind(tmp, geocode)[,trim_addr:= NULL]
+        dat <- rbind(dat, tmp)
+        utils::setTxtProgressBar(pb, ceiling(i/10))
       }
       results <- dat[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location:=NULL]
       succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
