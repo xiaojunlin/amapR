@@ -4,12 +4,14 @@
 \alias{geocoord}
 \title{Convert addresses into coordinates}
 \usage{
-geocoord(data, address)
+geocoord(data, address, ncore = 1e+09)
 }
 \arguments{
 \item{data}{The dataset, a dataframe or data.table}
 
 \item{address}{The column name of address}
+
+\item{ncore}{the number of CPU cores used}
 }
 \value{
 data.table
@@ -18,8 +20,15 @@ data.table
 Convert addresses into coordinates
 }
 \examples{
+\dontrun{
 library(amap)
 options(amap.key = "xxxxxxxxxxxx")
-# addr is the column having addresses in the dataset named dat.
-geocoord(data = dat, address = addr)
+
+# address is the column having Chinese addresses,
+# and the data set named test should be a data.frame or a data.table.
+result <- geocoord(data = test, address = "address")
+
+# limit the number of CPU cores used in geocoord
+result <- geocoord(data = test, address = "address", ncore = 4)
+}
 }

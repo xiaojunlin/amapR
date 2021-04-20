@@ -20,12 +20,15 @@ options(amap.key = 'xxxxxxxx')
 
 Use the `geocoord` function to convert addresses into coordinates.
 
+![](https://media.giphy.com/media/WRdv9LDuv9MZWLTQdP/giphy.gif)
+
+
 - When the number of addresses is less than or equal to 200, `geocoord` only utilizes one processor, which makes it single-threaded.
 
 >200 addresses
 
 ```R
-test <- data.frame(n = 1:200, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:200, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
@@ -40,7 +43,7 @@ user     system    elapsed
 >1,000 addresses
 
 ```R
-test <- data.frame(n = 1:1000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:1000, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
@@ -54,7 +57,7 @@ user     system    elapsed
 
 ```R
 # 10,000 addresses
-test <- data.frame(n = 1:10000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:10000, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
@@ -70,18 +73,18 @@ Here is the retured result in `data.table` format.
 result
 ```
 ```R
-        n  address          formatted_address longitude latitude
-   1:    1 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
-   2:    2 北京大学       北京市海淀区北京大学  116.3083 39.99530
-   3:    3 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
-   4:    4 北京大学       北京市海淀区北京大学  116.3083 39.99530
-   5:    5 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
+        n  address          formatted_address    longitude latitude
+   1:    1 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
+   2:    2 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+   3:    3 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
+   4:    4 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+   5:    5 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
   ---                                                            
- 996:  996 北京大学       北京市海淀区北京大学  116.3083 39.99530
- 997:  997 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
- 998:  998 北京大学       北京市海淀区北京大学  116.3083 39.99530
- 999:  999 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
-1000: 1000 北京大学       北京市海淀区北京大学  116.3083 39.99530
+ 996:  996 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+ 997:  997 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
+ 998:  998 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+ 999:  999 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
+1000: 1000 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
 ```
 
 - Theoratically, the more CPU cores you have, the faster the `geocoord` function will be. To compare the speed of `geocoord` function, we have queryed **100,000** addresses in the following two different platforms. The results shown that the Windows with more CPU cores is faster than the macOS (**260**s vs **629**s).
@@ -90,7 +93,7 @@ result
 
 ```R
 # 100,000 addresses
-test <- data.frame(n = 1:100000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:100000, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
@@ -104,7 +107,7 @@ user     system    elapsed
 
 ```R
 # 100,000 addresses
-test <- data.frame(n = 1:100000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:100000, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
@@ -120,7 +123,7 @@ For example:
 > 2 CPU cores
 
 ```R
-test <- data.frame(n = 1:3000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:3000, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address", ncore = 2) )
 ```
 ```R
@@ -131,7 +134,7 @@ user     system    elapsed
 ```
 > 4 CPU cores
 ```R
-test <- data.frame(n = 1:3000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:3000, address = c("华中科技大学", "四川大学"))
 system.time( result <- geocoord(data = test, address = "address", ncore = 4) )
 ```
 ```R

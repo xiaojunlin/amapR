@@ -1,7 +1,7 @@
 Package: amap
 Type: Package
 Title: An R package using AMap API to convert addresses into coordinates
-Version: 0.1.7
+Version: 1.0.0
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Description: This R package provides useful map tools for research using the AMap API.

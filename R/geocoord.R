@@ -15,10 +15,17 @@
 #' @return data.table
 #' @export geocoord
 #' @examples
+#' \dontrun{
 #' library(amap)
 #' options(amap.key = "xxxxxxxxxxxx")
-#' # addr is the column having addresses in the dataset named dat.
-#' geocoord(data = dat, address = addr)
+#'
+#' # address is the column having Chinese addresses,
+#' # and the data set named test should be a data.frame or a data.table.
+#' result <- geocoord(data = test, address = "address")
+#'
+#' # limit the number of CPU cores used in geocoord
+#' result <- geocoord(data = test, address = "address", ncore = 4)
+#' }
 
 geocoord <- function(data, address, ncore = 1000000000) {
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
