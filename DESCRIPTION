@@ -10,10 +10,12 @@ Imports:
     data.table,
     jsonlite,
     progress,
-    pbapply,
     parallel,
+    doSNOW,
+    foreach,
     stringr,
-    stats
+    stats,
+    utils
 Depends:
     R (>= 4.0.0)
 License: MIT + file LICENSE

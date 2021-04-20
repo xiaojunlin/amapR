@@ -2,11 +2,13 @@
 #' @description Convert addresses into coordinates
 #' @import data.table
 #' @import parallel
+#' @import doSNOW
+#' @import foreach
 #' @import progress
 #' @importFrom jsonlite fromJSON
-#' @importFrom pbapply pblapply pboptions
 #' @importFrom stringr str_replace_all
 #' @importFrom stats complete.cases
+#' @importFrom utils txtProgressBar setTxtProgressBar
 #' @param data The dataset, a dataframe or data.table
 #' @param address The column name of address
 #' @return data.table
@@ -32,7 +34,7 @@ geocoord <- function(data, address) {
       dat <- data.table()
       pb <- progress_bar$new(format = "[:bar] :percent elapsed=:elapsed remaining~:eta",
                              total = length(seq(1, df[,.N], by = 10)),
-                             complete = "+", incomplete = " ", current = " ", clear = F)
+                             complete = ":", incomplete = " ", current = " ", clear = F, width = 70)
       pb$tick(0)
       for (i in seq(1, df[,.N], by = 10)) {
         pb$tick(1)
@@ -53,7 +55,7 @@ geocoord <- function(data, address) {
       results <- dat[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location:=NULL]
       succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      message(paste0("   Success rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%"))
+      cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
       return(results)
     }
     query1(data, address)
@@ -71,15 +73,20 @@ geocoord <- function(data, address) {
       dat <- cbind(tmp, geocode)[,trim_addr:= NULL]
       return(dat)
     }
+    spldata <- split(data, f = ceiling(seq(nrow(data))/10))
+    pb <- txtProgressBar(max = length(spldata), style = 3, char = ":", width = 70)
+    progress <- function(n) setTxtProgressBar(pb, n)
+    opts <- list(progress = progress)
     cores <- detectCores() - 1
     cl <- makeCluster(cores)
-    spldata <- split(data, f = ceiling(seq(nrow(data))/10))
-    pboptions(type="timer", style=1, char="+")
-    result <- pblapply(X = seq_len(length(spldata)), FUN = function(i) { query2(spldata[[i]], address) }, cl = cl)
-    results <- do.call('rbind', result)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location := NULL]
+    registerDoSNOW(cl)
+    boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts)
+    myfunc <- function(i) { query2(spldata[[i]], address) }
+    result <- `%dopar%`(boot, myfunc(i))
+    results <- do.call('rbind', result)[, c("longitude", "latitude") := data.table::tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location := NULL]
     succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    message(paste0("   Success rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%"))
+    cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
     return(results)
     stopCluster(cl)
   }
