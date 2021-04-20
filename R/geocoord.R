@@ -32,8 +32,7 @@ geocoord <- function(data, address) {
     query1 <- function(data, address) {
       df <- as.data.table(data)
       dat <- data.table()
-      pb <- progress_bar$new(format = "[:bar] :percent elapsed=:elapsed remaining~:eta",
-                             total = length(seq(1, df[,.N], by = 10)),
+      pb <- progress_bar$new(format = "[:bar] :percent", total = length(seq(1, df[,.N], by = 10)),
                              complete = ":", incomplete = " ", current = " ", clear = F, width = 70)
       pb$tick(0)
       for (i in seq(1, df[,.N], by = 10)) {
