@@ -11,6 +11,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @param data The dataset, a dataframe or data.table
 #' @param address The column name of address
+#' @param ncore the number of CPU cores used
 #' @return data.table
 #' @export geocoord
 #' @examples
@@ -19,7 +20,7 @@
 #' # addr is the column having addresses in the dataset named dat.
 #' geocoord(data = dat, address = addr)
 
-geocoord <- function(data, address) {
+geocoord <- function(data, address, ncore = NULL) {
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
   key <- getOption("amap.key")
   stringreplace=function(x){
@@ -72,7 +73,7 @@ geocoord <- function(data, address) {
     pb <- txtProgressBar(max = length(spldata), style = 3, char = ":", width = 70)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
-    cores <- detectCores() - 1
+    cores <- min((detectCores() - 1), ncore)
     cl <- makeCluster(cores)
     registerDoSNOW(cl)
     boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts)
