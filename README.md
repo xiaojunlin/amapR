@@ -18,7 +18,7 @@ options(amap.key = 'xxxxxxxx')
 
 Use the `geocoord` function to convert addresses into coordinates.
 
-![](https://media.giphy.com/media/WRdv9LDuv9MZWLTQdP/giphy.gif)
+![geocoord example](picture/geocoord_example.gif)
 
 
 - When the number of addresses is less than or equal to 200, `geocoord` only utilizes one processor, which makes it single-threaded.
@@ -160,7 +160,6 @@ We had queried a series of addresses using the `amap` package and `amapGeocode` 
 | Network| China Telecom, Chengdu|
 | Date |2021-04-20 8:00PM  (GMT+8) |
 
-common used
 
 
 ![benchmarking](picture/benchmarking.png)
