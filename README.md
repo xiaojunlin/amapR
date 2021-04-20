@@ -7,7 +7,7 @@ An R package using AMap API to convert addresses into coordinates.
 devtools::install_github("xiaojunlin/amap") 
 ```
 
-## Usage
+## geocoord
 
 Before using the package, please make sure that you have applied the AMap API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key).
 
@@ -15,8 +15,6 @@ Before using the package, please make sure that you have applied the AMap API ke
 library(amap)
 options(amap.key = 'xxxxxxxx')
 ```
-
-### geocoord
 
 Use the `geocoord` function to convert addresses into coordinates.
 
@@ -143,3 +141,26 @@ Success rate:100% | Failure rate:0%
 user     system    elapsed
 0.19     0.03      14.48 
 ```
+
+
+
+### Benchmarking
+
+[`amapGeocode`](https://cran.r-project.org/web/packages/amapGeocode/index.html) is a popular R package used to convert address into coordinates using AMap API.
+
+We had queried a series of addresses using the `amap` package and `amapGeocode` package, respectively. The results were shown below.
+
+| Testing environment|  | 
+| ------ | ------ | 
+| Operation System | Windows | 
+| CPU | 3.6GHz Intel Core i7 (4 cores and 8 threads) |
+| Memory | 8 GB  |
+| R version | 4.0.5 |
+| RStudio version | 1.4.1106 |
+| Network| China Telecom, Chengdu|
+| Date |2021-04-20 8:00PM  (GMT+8) |
+
+common used
+
+
+![benchmarking](picture/benchmarking.png)
