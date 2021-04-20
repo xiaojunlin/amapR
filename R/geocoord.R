@@ -20,7 +20,7 @@
 #' # addr is the column having addresses in the dataset named dat.
 #' geocoord(data = dat, address = addr)
 
-geocoord <- function(data, address, ncore = NULL) {
+geocoord <- function(data, address, ncore = 1000000000) {
   if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
   key <- getOption("amap.key")
   stringreplace=function(x){
