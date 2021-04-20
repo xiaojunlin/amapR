@@ -71,8 +71,8 @@ geocoord <- function(data, address) {
       dat <- cbind(tmp, geocode)[,trim_addr:= NULL]
       return(dat)
     }
-    cores <- detectCores()
-    cl <- makeCluster(cores) - 1
+    cores <- detectCores() - 1
+    cl <- makeCluster(cores)
     spldata <- split(data, f = ceiling(seq(nrow(data))/10))
     pboptions(type="timer", style=1, char="+")
     result <- pblapply(X = seq_len(length(spldata)), FUN = function(i) { query2(spldata[[i]], address) }, cl = cl)
