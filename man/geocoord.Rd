@@ -2,21 +2,24 @@
 % Please edit documentation in R/geocoord.R
 \name{geocoord}
 \alias{geocoord}
-\title{Converting the addresses to coordinates}
+\title{Convert addresses into coordinates}
 \usage{
-geocoord(address)
+geocoord(data, address)
 }
 \arguments{
-\item{address}{The address}
+\item{data}{The dataset, a dataframe or data.table}
+
+\item{address}{The column name of address}
 }
 \value{
 data.table
 }
 \description{
-Converting the address to coordinates
+Convert addresses into coordinates
 }
 \examples{
 library(amap)
-options(amap.key = "xxxxxxxxxxxxxxxxxx")
-geocoord("address in Chinese format")
+options(amap.key = "xxxxxxxxxxxx")
+# addr is the column having addresses in the dataset named dat.
+geocoord(data = dat, address = addr)
 }

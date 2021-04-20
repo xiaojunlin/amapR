@@ -1,116 +1,85 @@
-#' @title Converting the addresses to coordinates
-#' @description Converting the address to coordinates
-#' @importFrom data.table as.data.table
-#' @import jsonlite
-#' @import progress
+#' @title Convert addresses into coordinates
+#' @description Convert addresses into coordinates
+#' @import data.table
 #' @import parallel
-#' @import pbapply
-#' @import dplyr
-#' @import tidyr
-#' @import stringr
-#' @param address The address
+#' @import progress
+#' @importFrom jsonlite fromJSON
+#' @importFrom pbapply pblapply pboptions
+#' @importFrom stringr str_replace_all
+#' @importFrom stats complete.cases
+#' @param data The dataset, a dataframe or data.table
+#' @param address The column name of address
 #' @return data.table
 #' @export geocoord
 #' @examples
 #' library(amap)
-#' options(amap.key = "xxxxxxxxxxxxxxxxxx")
-#' geocoord("address in Chinese format")
+#' options(amap.key = "xxxxxxxxxxxx")
+#' # addr is the column having addresses in the dataset named dat.
+#' geocoord(data = dat, address = addr)
 
-geocoord <- function(address) {
-  vars_list <- c('location','formatted_address')
-  if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'XXXXXXXXXXXXX')' ")
+geocoord <- function(data, address) {
+  if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
   key <- getOption("amap.key")
-  if (length(address) <= 200) {
-    query1 <- function(address) {
-      df <- as.data.frame(address)
-      colnames(df) <- "address"
-      dat <- slice(df, 0)
-      pb <- progress_bar$new(format = "[:bar] :percent :eta", total = length(seq(1, nrow(df), by = 10)))
+  stringreplace=function(x){
+    x <- str_replace_all(x, "[^[:alnum:]]", "_")
+    x <- str_replace_all(x, "[a-z]", "_")
+    x <- str_replace_all(x, "A-Z", "_")
+    return(x)
+  }
+  if (nrow(data) <= 200) {
+    query1 <- function(data, address) {
+      df <- as.data.table(data)
+      dat <- data.table()
+      pb <- progress_bar$new(format = "[:bar] :percent elapsed=:elapsed remaining~:eta",
+                             total = length(seq(1, df[,.N], by = 10)),
+                             complete = "+", incomplete = " ", current = " ", clear = F)
       pb$tick(0)
-      for (i in seq(1, nrow(df), by = 10)) {
+      for (i in seq(1, df[,.N], by = 10)) {
         pb$tick(1)
         try({
-          j <- min(i + 9, nrow(df))
-          tmp <- slice(df, i:j)
-          tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>%
-            str_replace_all("[a-z]", "_") %>%
-            str_replace_all("[A-Z]", "_") %>%
-            as.data.frame()
-          colnames(tmp_trim) <- "address"
-          url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
-                        "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
+          j <- min(i + 9, df[,.N])
+          tmp <- df[i:j, ][, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
+          url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
           list <- fromJSON(url)
           if (identical(list(), list$geocodes) == TRUE) {
-            geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
-            colnames(geocode) <- vars_list
+            geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
           } else {
-            geocode <- list$geocodes %>% select(all_of(vars_list))
-            for (k in vars_list) {
-              geocode[[k]] <- lapply(geocode[[k]],function(x) {
-                if(identical(x, character(0))) NA_character_ else x
-              })
-              geocode[[k]] <- lapply(geocode[[k]],function(x) {
-                if(identical(x, list())) NA_character_ else x
-              })
-            }
+            geocode <- as.data.table(list$geocodes)[,.(location, formatted_address)][location %in% c('character(0)'), location:=NA][formatted_address %in% c('character(0)'), formatted_address:=NA]
           }
-          tmp <- bind_cols(tmp, geocode) %>% mutate_all(as.character)
-          dat <- bind_rows(dat, tmp)
+          tmp <- cbind(tmp, geocode)[,trim_addr:= NULL]
+          dat <- rbind(dat, tmp)
         })
       }
-      results <- separate(dat, "location", into = c("longitude", "latitude"), sep = ",") %>%
-        mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
-      succ_rate <- round((nrow(results) - sum(is.na(results$longitude)))/nrow(results)*100, 1)
-      fail_rate <- round((sum(is.na(results$longitude)))/nrow(results)*100, 1)
-      message(paste0("  Success rate:", succ_rate, "%  |  ", "Failure rate:", fail_rate, "%  "))
+      results <- dat[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location:=NULL]
+      succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
+      fail_rate <- round(100 - succ_rate, 1)
+      message(paste0("   Success rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%"))
       return(results)
     }
-    query1(address)
+    query1(data, address)
   } else {
-    query2 <- function(address) {
-      df <- as.data.frame(address)
-      colnames(df) <- "address"
-      dat <- slice(df, 0)
-        try({
-          tmp <- slice(df, 1:nrow(df))
-          tmp_trim <- str_replace_all(tmp$address, "[^[:alnum:]]", "_") %>%
-            str_replace_all("[a-z]", "_") %>%
-            str_replace_all("[A-Z]", "_") %>%
-            as.data.frame()
-          colnames(tmp_trim) <- "address"
-          url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true",
-                        "&address=", paste0(pull(tmp_trim, address), collapse = " | "))
-          list <- fromJSON(url)
-          if (identical(list(), list$geocodes) == TRUE) {
-            geocode <- matrix(nrow = nrow(df), ncol = length(vars_list)) %>% as.data.frame()
-            colnames(geocode) <- vars_list
-          } else {
-            geocode <- list$geocodes %>% select(all_of(vars_list))
-            for (k in vars_list) {
-              geocode[[k]] <- lapply(geocode[[k]],function(x) {
-                if(identical(x, character(0))) NA_character_ else x
-              })
-              geocode[[k]] <- lapply(geocode[[k]],function(x) {
-                if(identical(x, list())) NA_character_ else x
-              })
-            }
-          }
-          tmp <- bind_cols(tmp, geocode) %>% mutate_all(as.character)
-          dat <- bind_rows(dat, tmp)
-        })
+    query2 <- function(data, address) {
+      df <- as.data.table(data)
+      tmp <- df[, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
+      url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
+      list <- fromJSON(url)
+      if (identical(list(), list$geocodes) == TRUE) {
+        geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
+      } else {
+        geocode <- as.data.table(list$geocodes)[,.(location, formatted_address)][location %in% c('character(0)'), location:=NA][formatted_address %in% c('character(0)'), formatted_address:=NA]
+      }
+      dat <- cbind(tmp, geocode)[,trim_addr:= NULL]
       return(dat)
     }
-    spldata <- split(address, f = ceiling(seq(length(address))/10))
     cores <- detectCores()
-    cl <- makeCluster(cores)
-    result <- pblapply(cl = cl, X = seq_len(length(spldata)),
-                       FUN = function(i) { query2(unlist(spldata[[i]])) })
-    results <- bind_rows(result)
-    results <- separate(results, "location", into = c("longitude", "latitude"), sep = ",") %>%
-      mutate_at(c("longitude", "latitude"), as.numeric) %>% as.data.table()
-    succ_rate <- round((nrow(results) - sum(is.na(results$longitude)))/nrow(results)*100, 1)
-    fail_rate <- round((sum(is.na(results$longitude)))/nrow(results)*100, 1)
-    message(paste0("  Success rate:", succ_rate, "%  |  ", "Failure rate:", fail_rate, "%  "))
+    cl <- makeCluster(cores) - 1
+    spldata <- split(data, f = ceiling(seq(nrow(data))/10))
+    pboptions(type="timer", style=1, char="+")
+    result <- pblapply(X = seq_len(length(spldata)), FUN = function(i) { query2(spldata[[i]], address) }, cl = cl)
+    results <- do.call('rbind', result)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location := NULL]
+    succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
+    fail_rate <- round(100 - succ_rate, 1)
+    message(paste0("   Success rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%"))
     return(results)
     stopCluster(cl)
   }
