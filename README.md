@@ -27,7 +27,7 @@ test <- data.frame(n = 1:200, address = c("北京大学", "四川大学"))
 system.time( results <- geocoord(data = test, address = "address") )
 ```
 ```R
-[+++++++++++++++++++++++++++++++++++++++++++++] 100% elapsed=11s remaining~ 0s
+[++++++++++++++++++++++++++++++++++++++++++] 100% elapsed=11s remaining~ 0s
 Success rate:100%  |  Failure rate:0%  
 user     system    elapsed
 0.726    0.076     11.474
