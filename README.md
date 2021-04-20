@@ -41,20 +41,20 @@ test <- data.frame(n = 1:1000, address = c("北京大学", "四川大学"))
 system.time( results <- geocoord(data = test, address = "address") )
 ```
 ```R
-|++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=07s, remaining~00s
+|++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=08s, remaining~00s
 Success rate:100% | Failure rate:0%
 user     system    elapsed
-0.192    0.071     7.575 
+0.195    0.074     8.873 
 ```
 
 ```R
 # 10,000 addresses
-test <- data.frame(n = 1:1000, address = c("北京大学", "四川大学"))
+test <- data.frame(n = 1:10000, address = c("北京大学", "四川大学"))
 system.time( results <- geocoord(data = test, address = "address") )
 ```
 ```R
-|++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=57s, remaining~00s
+|++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01m 08s, remaining~00s
 Success rate:100% | Failure rate:0%
 user     system    elapsed
-2.726    0.883     57.637 
+1.877    0.612     68.592  
 ```
