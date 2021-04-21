@@ -4,14 +4,14 @@
 \alias{geocoord}
 \title{Convert addresses into coordinates}
 \usage{
-geocoord(data, address, ncore = 1e+09)
+geocoord(data, address, ncore = 999)
 }
 \arguments{
-\item{data}{The dataset, a dataframe or data.table}
+\item{data}{The dataset, a data.frame or data.table}
 
 \item{address}{The column name of address}
 
-\item{ncore}{The specific number of CPU cores used (ncore = 1e+9 by default, which indicates maximum of CPU cores minus 1 )}
+\item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates maximum of CPU cores minus 1 )}
 }
 \value{
 a data.table which adds the formatted address, longitude and latitude in the original data set.
@@ -20,7 +20,7 @@ a data.table which adds the formatted address, longitude and latitude in the ori
 Convert addresses into coordinates
 }
 \note{
-According to the official document of AMap Web Service API, the value of address should be in Chinese format.
+According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
 If a address is in English or includes special characters (i.e., ?, -, >, _, etc.), the function may return empty result for this address automatically.
 }
 \examples{
@@ -29,12 +29,13 @@ library(amapR)
 options(amap.key = "xxxxxxxxxxxx")
 
 # Note: The "address" is the column having Chinese addresses, and the data set named "test"
-should be a data.frame or a data.table.
+# should be a data.frame or a data.table.
 result <- geocoord(data = test, address = "address")
 
 # Set the specific number of CPU cores used
 result <- geocoord(data = test, address = "address", ncore = 4)
 }
+
 }
 \references{
 Amap. Official documents for developers: Web Service API. https://lbs.amap.com/api/webservice/summary

@@ -9,11 +9,11 @@
 #' @importFrom stringr str_replace_all
 #' @importFrom stats complete.cases
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @param data The dataset, a dataframe or data.table
+#' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
-#' @param ncore The specific number of CPU cores used (ncore = 1e+9 by default, which indicates maximum of CPU cores minus 1 )
+#' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates maximum of CPU cores minus 1 )
 #' @return a data.table which adds the formatted address, longitude and latitude in the original data set.
-#' @note According to the official document of AMap Web Service API, the value of address should be in Chinese format.
+#' @note According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
 #' If a address is in English or includes special characters (i.e., ?, -, >, _, etc.), the function may return empty result for this address automatically.
 #' @references Amap. Official documents for developers: Web Service API. https://lbs.amap.com/api/webservice/summary
 #' @export geocoord
@@ -23,18 +23,19 @@
 #' options(amap.key = "xxxxxxxxxxxx")
 #'
 #' # Note: The "address" is the column having Chinese addresses, and the data set named "test"
-#' should be a data.frame or a data.table.
+#' # should be a data.frame or a data.table.
 #' result <- geocoord(data = test, address = "address")
 #'
 #' # Set the specific number of CPU cores used
 #' result <- geocoord(data = test, address = "address", ncore = 4)
 #' }
-
-geocoord <- function(data, address, ncore = 1000000000) {
+#'
+geocoord <- function(data, address, ncore = 999) {
   key <- getOption("amap.key")
-  if (is.null(getOption("amap.key")))
+  if (is.null(getOption("amap.key"))) {
     stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
-   stringreplace=function(x){
+  }
+  stringreplace <- function(x) {
     x <- str_replace_all(x, "[^[:alnum:]]", "_")
     x <- str_replace_all(x, "[a-z]", "_")
     x <- str_replace_all(x, "A-Z", "_")
@@ -44,27 +45,37 @@ geocoord <- function(data, address, ncore = 1000000000) {
     query1 <- function(data, address) {
       df <- as.data.table(data)
       dat <- data.table()
-      pb <- txtProgressBar(max = ceiling(df[,.N]/10), style = 3, char = ":", width = 70)
-      for (i in seq(1, df[,.N], by = 10)) {
-        j <- min(i + 9, df[,.N])
-        tmp <- df[i:j, ][, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
-        url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
+      pb <- txtProgressBar(max = ceiling(df[, .N] / 10), style = 3, char = ":", width = 70)
+      for (i in seq(1, df[, .N], by = 10)) {
+        j <- min(i + 9, df[, .N])
+        tmp <- df[i:j, ][, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
+        url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"))
         list <- fromJSON(url)
-        if (list$info == "INVALID_USER_KEY") {
-          message("\nYour key is invalid. Please use a valid key.")
-          break
-        }
+        switch (list$info,
+                "INVALID_USER_KEY" = {
+                  message("\nYour key is invalid. Please use a valid key.")
+                  break
+                },
+                "DAILY_QUERY_OVER_LIMIT" = {
+                  message("\nYour have reached the daily query limit.")
+                  break
+                },
+                "ACCESS_TOO_FREQUENT" = {
+                  message("\nYour have sent requests too frequent, please try again in 1 min.")
+                  break
+                }
+        )
         if (identical(list(), list$geocodes) == TRUE) {
-          geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
+          geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[, .N])[, n := NULL]
         } else {
-          geocode <- as.data.table(list$geocodes)[,.(location, formatted_address)][location %in% c('character(0)'), location:=NA][formatted_address %in% c('character(0)'), formatted_address:=NA]
+          geocode <- as.data.table(list$geocodes)[, .(location, formatted_address)][location %in% c("character(0)"), location := NA][formatted_address %in% c("character(0)"), formatted_address := NA]
         }
-        tmp <- cbind(tmp, geocode)[,trim_addr:= NULL]
+        tmp <- cbind(tmp, geocode)[, trim_addr := NULL]
         dat <- rbind(dat, tmp)
-        utils::setTxtProgressBar(pb, ceiling(i/10))
+        utils::setTxtProgressBar(pb, ceiling(i / 10))
       }
-      results <- dat[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location:=NULL]
-      succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
+      results <- dat[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location := NULL]
+      succ_rate <- round(sum(complete.cases(results[, longitude])) / results[, .N] * 100, 1)
       fail_rate <- round(100 - succ_rate, 1)
       cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
       return(results)
@@ -73,21 +84,29 @@ geocoord <- function(data, address, ncore = 1000000000) {
   } else {
     query2 <- function(data, address) {
       df <- as.data.table(data)
-      tmp <- df[, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
-      url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
+      tmp <- df[, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
+      url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"))
       list <- fromJSON(url)
-      if (list$info == "INVALID_USER_KEY") {
-        stop("\nYour key is invalid. Please use a valid key.")
-      }
+      switch (list$info,
+              "INVALID_USER_KEY" = {
+                stop("\nYour key is invalid. Please use a valid key.")
+              },
+              "DAILY_QUERY_OVER_LIMIT" = {
+                stop("\nYour have reached the daily query limit.")
+              },
+              "ACCESS_TOO_FREQUENT" = {
+                stop("\nYour have sent requests too frequent, please try again in 1 min.")
+              }
+      )
       if (identical(list(), list$geocodes) == TRUE) {
-        geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
+        geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[, .N])[, n := NULL]
       } else {
-        geocode <- as.data.table(list$geocodes)[,.(location, formatted_address)][location %in% c('character(0)'), location:=NA][formatted_address %in% c('character(0)'), formatted_address:=NA]
+        geocode <- as.data.table(list$geocodes)[, .(location, formatted_address)][location %in% c("character(0)"), location := NA][formatted_address %in% c("character(0)"), formatted_address := NA]
       }
-      dat <- cbind(tmp, geocode)[,trim_addr:= NULL]
+      dat <- cbind(tmp, geocode)[, trim_addr := NULL]
       return(dat)
     }
-    spldata <- split(data, f = ceiling(seq(nrow(data))/10))
+    spldata <- split(data, f = ceiling(seq(nrow(data)) / 10))
     pb <- txtProgressBar(max = length(spldata), style = 3, char = ":", width = 70)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
@@ -95,10 +114,12 @@ geocoord <- function(data, address, ncore = 1000000000) {
     cl <- makeCluster(cores)
     registerDoSNOW(cl)
     boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts)
-    myfunc <- function(i) { query2(spldata[[i]], address) }
+    myfunc <- function(i) {
+      query2(spldata[[i]], address)
+    }
     result <- `%dopar%`(boot, myfunc(i))
-    results <- do.call('rbind', result)[, c("longitude", "latitude") := data.table::tstrsplit(location, ",", fixed = TRUE )][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location := NULL]
-    succ_rate <- round(sum(complete.cases(results[,longitude]))/results[,.N]*100, 1)
+    results <- do.call("rbind", result)[, c("longitude", "latitude") := data.table::tstrsplit(location, ",", fixed = TRUE)][, longitude := as.numeric(longitude)][, latitude := as.numeric(latitude)][, location := NULL]
+    succ_rate <- round(sum(complete.cases(results[, longitude])) / results[, .N] * 100, 1)
     fail_rate <- round(100 - succ_rate, 1)
     cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
     return(results)
