@@ -150,7 +150,7 @@ We had queried a series of addresses using the `amapR` package and `amapGeocode`
 
 | Testing environment|  | 
 | ------ | ------ | 
-| Operation System | Windows | 
+| Operation System | Windows 10 | 
 | CPU | 3.6GHz Intel Core i7 (4 cores and 8 threads) |
 | Memory | 8 GB  |
 | R version | 4.0.5 |
