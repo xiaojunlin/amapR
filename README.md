@@ -165,5 +165,5 @@ We had queried a series of addresses using the `amapR` package and `amapGeocode`
 
 ## Plan
 
-- [ ] geolocation: Convert coordinates into addresses
-- [ ] geocovert: Convert coordinates from other coordinate systems (such as baidu, tencent, etc.) to Amap system
+- [ ] `geolocation`: Convert coordinates into addresses
+- [ ] `geocovert`: Convert coordinates from other coordinate systems (such as baidu, tencent, etc.) to Amap system
