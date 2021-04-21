@@ -16,9 +16,9 @@ library(amapR)
 options(amap.key = 'xxxxxxxx')
 ```
 
-Use the `geocoord` function to convert addresses into coordinates.
+Use the `geocoord` function to convert addresses into coordinates. Here is the [manual](docs/amapR_0.2.0.pdf) for this package.
 
-![geocoord example](picture/geocoord_example.gif)
+![geocoord example](docs/geocoord_example.gif)
 
 
 - When the number of addresses is less than or equal to 200, `geocoord` only utilizes one processor, which makes it single-threaded.
@@ -160,4 +160,4 @@ We had queried a series of addresses using the `amapR` package and `amapGeocode`
 
 
 
-![benchmarking](picture/benchmarking.png)
+![benchmarking](docs/benchmarking.png)
