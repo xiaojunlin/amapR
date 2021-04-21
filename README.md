@@ -163,7 +163,66 @@ We had queried a series of addresses using the `amapR` package and `amapGeocode`
 ![benchmarking](docs/benchmarking.png)
 
 
-## Plan
+## geolocation
 
-- [ ] `geolocation`: Convert coordinates into addresses
-- [ ] `geocovert`: Convert coordinates from other coordinate systems (such as baidu, tencent, etc.) to Amap system
+Convert the coordinates into formatted addresses.
+
+For example:
+
+> 200 coordinates
+
+```R
+test <- data.frame(n = 1:200, lng = c(114.4345,104.0837), lat = c(30.51105, 30.63087))
+system.time( results <- geolocation(data = test, longitude = "lng", latitude = "lat") )
+```
+```R
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user    system  elapsed 
+0.342   0.029   5.891 
+```
+
+> 10,000 coordinates
+
+```R
+test <- data.frame(n = 1:10000, lng = c(114.4345,104.0837), lat = c(30.51105, 30.63087))
+system.time( results <- geolocation(data = test, longitude = "lng", latitude = "lat") )
+```
+```R
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user    system  elapsed 
+0.604   0.224   40.198 
+```
+
+
+## transcoord
+
+Transform the coordinates from other coordinate systems to Amap system, including baidu, gps, and mapbar.
+
+For example:
+
+> 200 coordinates from gps system
+
+```R
+test <- data.frame(n = 1:200, lng = c(114.4345,104.0837), lat = c(30.51105, 30.63087))
+results <- transcoord(data = test, longitude = "lng", latitude = "lat", coordsys = "gps")
+```
+```R
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user    system  elapsed 
+0.110   0.013   2.337 
+```
+> 10,000 coordinates from baidu system
+
+```R
+test <- data.frame(n = 1:10000, lng = c(114.4345,104.0837), lat = c(30.51105, 30.63087))
+system.time( results <- transcoord(data = test, longitude = "lng", latitude = "lat", coordsys = "baidu") )
+```
+```R
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user    system  elapsed 
+0.593   0.202   32.925 
+```

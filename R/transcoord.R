@@ -121,7 +121,7 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
       dat <- cbind(df, new_coord)[,trim_location:=NULL]
       return(dat)
     }
-    spldata <- split(data, f = ceiling(seq(nrow(data))/20))
+    spldata <- split(data, f = ceiling(seq(nrow(data))/40))
     pb <- txtProgressBar(max = length(spldata), style = 3, char = ":", width = 70)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)

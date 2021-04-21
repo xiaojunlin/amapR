@@ -24,10 +24,10 @@
 #'
 #' # Note: The "address" is the column having Chinese addresses, and the data set named "test"
 #' # should be a data.frame or a data.table.
-#' result <- geocoord(data = test, address = "address")
+#' results <- geocoord(data = test, address = "address")
 #'
 #' # Set the specific number of CPU cores used
-#' result <- geocoord(data = test, address = "address", ncore = 4)
+#' results <- geocoord(data = test, address = "address", ncore = 4)
 #' }
 #'
 geocoord <- function(data, address, ncore = 999) {
