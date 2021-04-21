@@ -9,7 +9,7 @@ devtools::install_github("xiaojunlin/amap")
 
 ## geocoord
 
-Before using the package, please make sure that you have applied the AMap API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key).
+Before using the package, please make sure that you have applied the AMap Web Service API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key).
 
 ```R
 library(amap)
@@ -65,7 +65,7 @@ user     system    elapsed
 1.044    0.344     64.697   
 ```
 
-Here is the retured result in `data.table` format.
+Here is the returned result in `data.table` format.
 
 ```R
 result
@@ -114,9 +114,7 @@ Success rate:100% | Failure rate:0%
 user     system    elapsed
 4.93     0.58      260.27   
 ```
-However, the Amap have set the [query limit](https://lbs.amap.com/api/webservice/guide/tools/flowlevel) (200 times per second for personal certified developer). For personal certified developer, I would not recommend you to use too many CPU cores. To avoid http error, you can set the number of CPU cores used in the fucntion using `ncore` argument. 
-
-For example:
+However, the Amap Web Service API have set the [query limit](https://lbs.amap.com/api/webservice/guide/tools/flowlevel) (e.g., 200 times per second for personal certified developer). For personal certified developer, I would not recommend you to use too many CPU cores. To avoid http error, you can set the specific number of CPU cores used in the `ncore` argument. For example:
 
 > 2 CPU cores
 

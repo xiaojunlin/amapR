@@ -11,7 +11,7 @@ geocoord(data, address, ncore = 1e+09)
 
 \item{address}{The column name of address}
 
-\item{ncore}{the number of CPU cores used}
+\item{ncore}{The specific number of CPU cores used (maximum of CPU cores minus 1 by default)}
 }
 \value{
 data.table

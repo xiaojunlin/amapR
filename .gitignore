@@ -39,9 +39,6 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# Benckmarking file
-benckmarking.R
-fetchCoordinate.R
-
 # Folders
 /archive/
+/benchmarking/

@@ -11,7 +11,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @param data The dataset, a dataframe or data.table
 #' @param address The column name of address
-#' @param ncore the number of CPU cores used
+#' @param ncore The specific number of CPU cores used (maximum of CPU cores minus 1 by default)
 #' @return data.table
 #' @export geocoord
 #' @examples
@@ -28,9 +28,10 @@
 #' }
 
 geocoord <- function(data, address, ncore = 1000000000) {
-  if (is.null(getOption("amap.key"))) stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
   key <- getOption("amap.key")
-  stringreplace=function(x){
+  if (is.null(getOption("amap.key")))
+    stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
+   stringreplace=function(x){
     x <- str_replace_all(x, "[^[:alnum:]]", "_")
     x <- str_replace_all(x, "[a-z]", "_")
     x <- str_replace_all(x, "A-Z", "_")
@@ -46,6 +47,10 @@ geocoord <- function(data, address, ncore = 1000000000) {
         tmp <- df[i:j, ][, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
         url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
         list <- fromJSON(url)
+        if (list$info == "INVALID_USER_KEY") {
+          message("\nYour key is invalid. Please use a valid key.")
+          break
+        }
         if (identical(list(), list$geocodes) == TRUE) {
           geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
         } else {
@@ -68,6 +73,9 @@ geocoord <- function(data, address, ncore = 1000000000) {
       tmp <- df[, trim_addr :=lapply(.SD, stringreplace), .SDcols = address]
       url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key, "&batch=true", "&address=", paste0(tmp[,trim_addr], collapse = "|"))
       list <- fromJSON(url)
+      if (list$info == "INVALID_USER_KEY") {
+        stop("\nYour key is invalid. Please use a valid key.")
+      }
       if (identical(list(), list$geocodes) == TRUE) {
         geocode <- data.table(location = NA, formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
       } else {
