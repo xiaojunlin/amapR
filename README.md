@@ -1,10 +1,10 @@
-# amap
+# amapR
 An R package using AMap API to convert addresses into coordinates.
 
 ## Installation
 
 ```R
-devtools::install_github("xiaojunlin/amap") 
+devtools::install_github("xiaojunlin/amapR") 
 ```
 
 ## geocoord
@@ -12,7 +12,7 @@ devtools::install_github("xiaojunlin/amap")
 Before using the package, please make sure that you have applied the AMap Web Service API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key).
 
 ```R
-library(amap)
+library(amapR)
 options(amap.key = 'xxxxxxxx')
 ```
 
@@ -146,7 +146,7 @@ user     system    elapsed
 
 [`amapGeocode`](https://cran.r-project.org/web/packages/amapGeocode/index.html) is a popular R package used to convert address into coordinates using AMap API.
 
-We had queried a series of addresses using the `amap` package and `amapGeocode` package, respectively. The results were shown below.
+We had queried a series of addresses using the `amapR` package and `amapGeocode` package, respectively. The results were shown below.
 
 | Testing environment|  | 
 | ------ | ------ | 
@@ -156,7 +156,7 @@ We had queried a series of addresses using the `amap` package and `amapGeocode` 
 | R version | 4.0.5 |
 | RStudio version | 1.4.1106 |
 | Network| China Telecom, Chengdu|
-| Date |2021-04-20 8:00PM  (GMT+8) |
+| Date |2021-04-20 8:00PM  (GMT+8) |F
 
 
 

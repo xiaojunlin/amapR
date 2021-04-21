@@ -21,7 +21,7 @@ Convert addresses into coordinates
 }
 \examples{
 \dontrun{
-library(amap)
+library(amapR)
 options(amap.key = "xxxxxxxxxxxx")
 
 # address is the column having Chinese addresses,
