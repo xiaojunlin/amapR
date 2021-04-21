@@ -224,5 +224,5 @@ system.time( results <- transcoord(data = test, longitude = "lng", latitude = "l
 |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
 Success rate:100% | Failure rate:0%
 user    system  elapsed 
-0.593   0.202   32.925 
+0.316   0.108   16.892 
 ```
