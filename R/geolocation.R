@@ -42,19 +42,25 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
   coord_clean <- function(x){
     x <- as.numeric(x)
     x <- round(x, 6)
-    x[is.na(x)] <- 999
     return(x)
   }
   if (nrow(data) <= 200) {
     query1 <- function(data, longitude, latitude) {
-      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude][, trim_location := paste(trim_lng, trim_lat, sep = ",")][,trim_lng:=NULL][,trim_lat:=NULL]
+      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude
+                                ][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude
+                                  ][, miss := is.na(trim_lng) + is.na(trim_lat)
+                                    ][miss != 0, trim_lng := 116.480881
+                                      ][miss != 0, trim_lat := 39.989410
+                                        ][, trim_location := paste(trim_lng, trim_lat, sep = ",")
+                                          ][,`:=`(trim_lng = NULL, trim_lat = NULL)]
       results <- data.table()
       pb <- txtProgressBar(max = ceiling(df[,.N]/20), style = 3, char = ":", width = 70)
       for (i in seq(1, df[,.N], by = 20)) {
         try({
           j <- min(i + 19, df[,.N])
           tmp <- df[i:j, ]
-          url <- paste0("https://restapi.amap.com/v3/geocode/regeo?", "key=", key, "&batch=true", "&location=", paste0(tmp[,trim_location], collapse = "|"))
+          url <- paste0("https://restapi.amap.com/v3/geocode/regeo?", "key=", key,
+                        "&batch=true", "&location=", paste0(tmp[,trim_location], collapse = "|"))
           list <- fromJSON(url)
           switch (list$info,
                   "INVALID_USER_KEY" = {
@@ -71,11 +77,13 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
                   }
           )
           if (identical(list(), list$regeocodes) == TRUE) {
-            regeocode <- data.table(formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
+            regeocode <- data.table(formatted_address = NA, n = 1:df[,.N])[,n := NULL]
           } else {
-            regeocode <- as.data.table(list$regeocode)[formatted_address %in% c('character(0)'), formatted_address:=NA][, .(formatted_address)]
+            regeocode <- as.data.table(list$regeocode)[formatted_address %in% c('character(0)'), formatted_address := NA
+                                                       ][, .(formatted_address)]
           }
-          tmp <- cbind(tmp, regeocode)[,trim_location:=NULL]
+          tmp <- cbind(tmp, regeocode)[miss!=0, formatted_address := NA
+                                       ][,`:=`(trim_location = NULL, miss = NULL)]
           results <- rbind(results, tmp)
         })
         setTxtProgressBar(pb, ceiling(i/20))
@@ -88,8 +96,15 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
     query1(data, longitude, latitude)
   } else {
     query2 <- function(data, longitude, latitude) {
-      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude][, trim_location := paste(trim_lng, trim_lat, sep = ",")][,trim_lng:=NULL][,trim_lat:=NULL]
-      url <- paste0("https://restapi.amap.com/v3/geocode/regeo?", "key=", key, "&batch=true", "&location=", paste0(df[,trim_location], collapse = "|"))
+      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude
+                                ][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude
+                                  ][, miss := is.na(trim_lng) + is.na(trim_lat)
+                                    ][miss != 0, trim_lng := 116.480881
+                                      ][miss != 0, trim_lat := 39.989410
+                                        ][, trim_location := paste(trim_lng, trim_lat, sep = ",")
+                                          ][,`:=`(trim_lng = NULL, trim_lat = NULL)]
+      url <- paste0("https://restapi.amap.com/v3/geocode/regeo?", "key=", key,
+                    "&batch=true", "&location=", paste0(df[,trim_location], collapse = "|"))
       list <- fromJSON(url)
       switch (list$info,
               "INVALID_USER_KEY" = {
@@ -103,11 +118,13 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
               }
       )
       if (identical(list(), list$regeocodes) == TRUE) {
-        regeocode <- data.table(formatted_address = NA, n = 1:df[,.N])[,n:=NULL]
+        regeocode <- data.table(formatted_address = NA, n = 1:df[,.N])[,n := NULL]
       } else {
-        regeocode <- as.data.table(list$regeocode)[formatted_address %in% c('character(0)'), formatted_address:=NA][, .(formatted_address)]
+        regeocode <- as.data.table(list$regeocode)[formatted_address %in% c('character(0)'), formatted_address:=NA
+                                                   ][, .(formatted_address)]
       }
-      dat <- cbind(df, regeocode)[,trim_location:=NULL]
+      dat <- cbind(df, regeocode)[miss!=0, formatted_address := NA
+                                  ][,`:=`(trim_location = NULL, miss = NULL)]
       return(dat)
     }
     spldata <- split(data, f = ceiling(seq(nrow(data))/20))
@@ -121,10 +138,10 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
     myfunc <- function(i) { query2(spldata[[i]], longitude, latitude) }
     result <- `%dopar%`(boot, myfunc(i))
     results <- do.call('rbind', result)
+    stopCluster(cl)
     fail_rate <- round(sum(is.na(results[,formatted_address]))/results[,.N]*100, 1)
     succ_rate <- round(100 - fail_rate, 1)
     cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
     return(results)
-    stopCluster(cl)
   }
 }

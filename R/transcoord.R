@@ -33,27 +33,18 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
   coord_clean <- function(x){
     x <- as.numeric(x)
     x <- round(x, 6)
-    x[is.na(x)] <- 999
     return(x)
-  }
-  if (coordsys == "mapbar") {
-    coord_clean2 <- function(x) {
-      x <- as.numeric(x)
-      x <- round(x, 6)
-      x[x > 278] <- NA
-      return(x)
-    }
-  } else {
-    coord_clean2 <- function(x) {
-      x <- as.numeric(x)
-      x <- round(x, 6)
-      x[x > 990] <- NA
-      return(x)
-    }
   }
   if (nrow(data) <= 200) {
     query1 <- function(data, longitude, latitude, coordsys) {
-      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude][, trim_location := paste(trim_lng, trim_lat, sep = ",")][,trim_lng:=NULL][,trim_lat:=NULL]
+      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude
+                                ][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude
+                                  ][, miss_lng := is.na(trim_lng)
+                                    ][, miss_lat := is.na(trim_lat)
+                                      ][is.na(trim_lng) == T, trim_lng := 116.480881
+                                        ][is.na(trim_lat) == T, trim_lat := 39.989410
+                                          ][, trim_location := paste(trim_lng, trim_lat, sep = ",")
+                                            ][,`:=`(trim_lng = NULL, trim_lat= NULL)]
       results <- data.table()
       pb <- txtProgressBar(max = ceiling(df[,.N]/40), style = 3, char = ":", width = 70)
       for (i in seq(1, df[,.N], by = 40)) {
@@ -81,14 +72,17 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
           } else {
             new_coord <- as.matrix(tstrsplit(list$locations, ";", fixed = TRUE))
             colnames(new_coord) <- "location"
-            new_coord <- as.data.table(new_coord)[, c("lng_amap", "lat_amap"):=tstrsplit(location, ",", fixed = TRUE)][,location:=NULL][,lapply(.SD, coord_clean2), .SDcols=c("lng_amap", "lat_amap")]
+            new_coord <- as.data.table(new_coord)[, c("lng_amap", "lat_amap") := tstrsplit(location, ",", fixed = TRUE)
+                                                  ][,lng_amap := lapply(.SD, coord_clean), .SDcols = "lng_amap"
+                                                    ][,lat_amap := lapply(.SD, coord_clean), .SDcols = "lat_amap"]
           }
-          tmp <- cbind(tmp, new_coord)
+          tmp <- cbind(tmp, new_coord)[miss_lng == T, lng_amap := NA
+                                       ][miss_lat == T, lat_amap := NA]
           results <- rbind(results, tmp)
         })
         setTxtProgressBar(pb, ceiling(i/40))
       }
-      results <- results[,trim_location:=NULL]
+      results <- results[, `:=`(miss_lng = NULL, miss_lat = NULL, trim_location = NULL, location = NULL)]
       succ_rate <- round(results[is.na(lng_amap) == F & is.na(lat_amap) == F,.N]/results[,.N]*100, 1)
       fail_rate <- round(100 - succ_rate, 1)
       cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
@@ -97,7 +91,14 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
     query1(data, longitude, latitude, coordsys)
   } else {
     query2 <- function(data, longitude, latitude, coordsys) {
-      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude][, trim_location := paste(trim_lng, trim_lat, sep = ",")][,trim_lng:=NULL][,trim_lat:=NULL]
+      df <- as.data.table(data)[, trim_lng := lapply(.SD, coord_clean), .SDcols = longitude
+                                ][,trim_lat := lapply(.SD, coord_clean), .SDcols = latitude
+                                  ][, miss_lng := is.na(trim_lng)
+                                    ][, miss_lat := is.na(trim_lat)
+                                      ][is.na(trim_lng) == T, trim_lng := 116.480881
+                                        ][is.na(trim_lat) == T, trim_lat := 39.989410
+                                          ][, trim_location := paste(trim_lng, trim_lat, sep = ",")
+                                            ][,`:=`(trim_lng = NULL, trim_lat= NULL)]
       url <- paste0("https://restapi.amap.com/v3/assistant/coordinate/convert?", "key=", key, "&coordsys=", coordsys, "&locations=", paste0(df[,trim_location], collapse = "|"))
       list <- fromJSON(url)
       switch (list$info,
@@ -116,9 +117,11 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
       } else {
         new_coord <- as.matrix(tstrsplit(list$locations, ";", fixed = TRUE))
         colnames(new_coord) <- "location"
-        new_coord <- as.data.table(new_coord)[, c("lng_amap", "lat_amap"):=tstrsplit(location, ",", fixed = TRUE)][,location:=NULL][,lapply(.SD, coord_clean2), .SDcols=c("lng_amap", "lat_amap")]
+        new_coord <- as.data.table(new_coord)[, c("lng_amap", "lat_amap") := tstrsplit(location, ",", fixed = TRUE)
+                                              ][,lng_amap := lapply(.SD, coord_clean), .SDcols = "lng_amap"
+                                                ][,lat_amap := lapply(.SD, coord_clean), .SDcols = "lat_amap"]
       }
-      dat <- cbind(df, new_coord)[,trim_location:=NULL]
+      dat <- cbind(df, new_coord)[, `:=`(miss_lng = NULL, miss_lat = NULL, trim_location = NULL, location = NULL)]
       return(dat)
     }
     spldata <- split(data, f = ceiling(seq(nrow(data))/40))
@@ -132,10 +135,10 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
     myfunc <- function(i) { query2(spldata[[i]], longitude, latitude, coordsys) }
     result <- `%dopar%`(boot, myfunc(i))
     results <- do.call('rbind', result)
+    stopCluster(cl)
     succ_rate <- round(results[is.na(lng_amap) == F & is.na(lat_amap) == F,.N]/results[,.N]*100, 1)
     fail_rate <- round(100 - succ_rate, 1)
     cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
     return(results)
-    stopCluster(cl)
   }
 }
