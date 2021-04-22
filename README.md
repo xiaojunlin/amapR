@@ -216,7 +216,7 @@ user     system    elapsed
 
 Convert the coordinates into formatted addresses.
 
-Example:
+Examples:
 
 > 200 coordinates
 
