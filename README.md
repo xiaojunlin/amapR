@@ -109,17 +109,32 @@ user     system    elapsed
 - When the addresses have missing value
 
 ```R
-test <- data.frame(n = 1:1000, address = c("", "四川大学"))
+test <- data.frame(n = 1:1000, address = c(NA, "四川大学"))
 system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
 |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
-Success rate:100% | Failure rate:0%
-user     system    elapsed
-0.142    0.057     7.475 
+Success rate:50% | Failure rate:50%
+   user  system elapsed 
+  0.170   0.066   7.901
 ```
-
-
+```R
+result
+```
+```R
+         n  address    formatted_address longitude latitude
+   1:    1     <NA>                   NA        NA       NA
+   2:    2 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
+   3:    3     <NA>                   NA        NA       NA
+   4:    4 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
+   5:    5     <NA>                   NA        NA       NA
+  ---                                                            
+ 996:  996 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
+ 997:  997     <NA>                   NA        NA       NA
+ 998:  998 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
+ 999:  999     <NA>                   NA        NA       NA
+1000: 1000 四川大学 四川省成都市武侯区四川大学  104.0837 30.63087
+```
 
 - We have queryed **100,000** addresses in the following two different platforms with different CPU cores to compare the speed of `geocoord` function. The results have shown that the Windows with more CPU cores is faster than the macOS (**260**s vs **629**s).
 
