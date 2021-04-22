@@ -36,9 +36,13 @@ geocoord <- function(data, address, ncore = 999) {
     stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
   }
   stringreplace <- function(x) {
-    x <- str_replace_all(x, "[^[:alnum:]]", "_")
-    x <- str_replace_all(x, "[a-z]", "_")
-    x <- str_replace_all(x, "A-Z", "_")
+    if (is.na(x) == T){
+      x <- " "
+    } else {
+      x <- str_replace_all(x, "[^[:alnum:]]", "_")
+      x <- str_replace_all(x, "[a-z]", "_")
+      x <- str_replace_all(x, "A-Z", "_")
+    }
     return(x)
   }
   if (nrow(data) <= 200) {

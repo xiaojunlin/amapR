@@ -1,5 +1,27 @@
 # amapR
-An R package using AMap API to convert addresses into coordinates.
+An R package using AMap Web Service API to convert between addresses and coordinates.
+
+## Package features
+
+- **Parallel computing**
+  
+  Benefiting from the R parallel computing, `amapR` package has speed advantage in handling large data of addresses or coordinates. Under the premise of not exceeding the query limit, the more CPU cores you use, the faster the functions in this package will be.
+
+- **Batch query**
+
+   This package embed the batch query feature of AMap Web Service API, which allows us to query a batch of addresses or coordinates in one time. For example, AMap API can convert 10 addresses into coordinates in one query. The upper query limit for personal certified developer is 3 millions per day. That is, a personal certified developer, theoratically, can convert <u>30 million</u> addresses per day.
+
+- **Handle special characteristics or missing value**
+
+  This package could handle the addresses or coordinates with special characteristics or missing value by "skipping" them and returning empty results.
+
+- **Progress bar**
+  
+  This package provides a progress bar to show the query progress, which is very useful when the query time may be unpredictable.
+  
+- **Breif report**
+  
+  A berif report including the success and failure rates is shown at the end of query.
 
 ## Installation
 
@@ -7,16 +29,16 @@ An R package using AMap API to convert addresses into coordinates.
 devtools::install_github("xiaojunlin/amapR") 
 ```
 
-## geocoord
+**NOTE:** Before using the package, please make sure that you have applied the AMap Web Service API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key). Here is the [manual](docs/amapR_0.2.0.pdf) for this package.
 
-Before using the package, please make sure that you have applied the AMap Web Service API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key).
+## geocoord
 
 ```R
 library(amapR)
 options(amap.key = 'xxxxxxxx')
 ```
 
-Use the `geocoord` function to convert addresses into coordinates. Here is the [manual](docs/amapR_0.2.0.pdf) for this package.
+Use the `geocoord` function to convert addresses into coordinates. 
 
 ![geocoord example](docs/geocoord_example.gif)
 
@@ -34,6 +56,25 @@ system.time( result <- geocoord(data = test, address = "address") )
 Success rate:100% | Failure rate:0%  
 user     system    elapsed
 0.690    0.045     10.736
+```
+Here is the returned result in `data.table` format.
+
+```R
+result
+```
+```R
+       n   address          formatted_address longitude latitude
+  1:   1  华中科技大学 湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+  2:   2     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
+  3:   3 华中科技大学 湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+  4:   4     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
+  5:   5 华中科技大学 湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+ ---                                                                   
+196: 196     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
+197: 197 华中科技大学 湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+198: 198     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
+199: 199 华中科技大学 湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+200: 200     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
 ```
 
 - When the number of addresses is over 200, `geocoord` utilizes multiple processors and runs parallel computation. The following examples were run in the MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports) with Intel Core i5 (2 cores and 4 threads).
@@ -65,27 +106,22 @@ user     system    elapsed
 1.044    0.344     64.697   
 ```
 
-Here is the returned result in `data.table` format.
+- When the addresses have missing value
 
 ```R
-result
+test <- data.frame(n = 1:1000, address = c("", "四川大学"))
+system.time( result <- geocoord(data = test, address = "address") )
 ```
 ```R
-        n  address          formatted_address    longitude latitude
-   1:    1 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
-   2:    2 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
-   3:    3 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
-   4:    4 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
-   5:    5 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
-  ---                                                            
- 996:  996 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
- 997:  997 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
- 998:  998 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
- 999:  999 四川大学         四川省成都市武侯区四川大学  104.0837 30.63087
-1000: 1000 华中科技大学  湖北省武汉市洪山区华中科技大学  114.4345 30.51105
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::| 100%
+Success rate:100% | Failure rate:0%
+user     system    elapsed
+0.142    0.057     7.475 
 ```
 
-- Theoratically, the more CPU cores you have, the faster the `geocoord` function will be. To compare the speed of `geocoord` function, we have queryed **100,000** addresses in the following two different platforms. The results shown that the Windows with more CPU cores is faster than the macOS (**260**s vs **629**s).
+
+
+- We have queryed **100,000** addresses in the following two different platforms with different CPU cores to compare the speed of `geocoord` function. The results have shown that the Windows with more CPU cores is faster than the macOS (**260**s vs **629**s).
 
 > **macOS**: 2.9GHz Intel Core i5 (2 cores and 4 threads) , 16 GB memory
 
@@ -114,7 +150,7 @@ Success rate:100% | Failure rate:0%
 user     system    elapsed
 4.93     0.58      260.27   
 ```
-However, the Amap Web Service API have set the [query limit](https://lbs.amap.com/api/webservice/guide/tools/flowlevel) (e.g., 200 times per second for personal certified developer). For personal certified developer, I would not recommend you to use too many CPU cores. To avoid http error, you can set the specific number of CPU cores used in the `ncore` argument. For example:
+However, the Amap Web Service API have set the [query limit](https://lbs.amap.com/api/webservice/guide/tools/flowlevel) (e.g., 200 times per second for personal certified developer). For personal certified developer, I would not recommend you to use too many CPU cores. To avoid http error, you can set the specific number of CPU cores used in the `ncore` argument. `ncore` = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores. For example:
 
 > 2 CPU cores
 
@@ -144,9 +180,7 @@ user     system    elapsed
 
 ### Benchmarking
 
-[`amapGeocode`](https://cran.r-project.org/web/packages/amapGeocode/index.html) is a popular R package used to convert address into coordinates using AMap API.
-
-We had queried a series of addresses using the `amapR` package and `amapGeocode` package, respectively. The results were shown below.
+[`amapGeocode`](https://cran.r-project.org/web/packages/amapGeocode/index.html) is a popular R package using AMap API to convert between addresses and coordinates. The `getCoord` function in this package could convert addresses into coordinates. To compare the speed of `amapGeocode::getCoord` and `amapR::geocode`, we had queried a series of addresses using these two functions, respectively. The results were shown below.
 
 | Testing environment|  | 
 | ------ | ------ | 
@@ -167,7 +201,7 @@ We had queried a series of addresses using the `amapR` package and `amapGeocode`
 
 Convert the coordinates into formatted addresses.
 
-For example:
+Example:
 
 > 200 coordinates
 
@@ -200,7 +234,7 @@ user    system  elapsed
 
 Transform the coordinates from other coordinate systems to Amap system, including baidu, gps, and mapbar.
 
-For example:
+Examples:
 
 > 200 coordinates from gps system
 
