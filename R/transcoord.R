@@ -126,7 +126,9 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
                                               ][,lng_amap := lapply(.SD, coord_clean), .SDcols = "lng_amap"
                                                 ][,lat_amap := lapply(.SD, coord_clean), .SDcols = "lat_amap"]
       }
-      dat <- cbind(df, new_coord)[, `:=`(miss_lng = NULL, miss_lat = NULL, trim_location = NULL, location = NULL)]
+      dat <- cbind(df, new_coord)[miss_lng == T, lng_amap := NA
+                                  ][miss_lat == T, lat_amap := NA
+                                    ][, `:=`(miss_lng = NULL, miss_lat = NULL, trim_location = NULL, location = NULL)]
       return(dat)
     }
     spldata <- split(data, f = ceiling(seq(nrow(data))/40))
