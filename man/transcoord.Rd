@@ -15,7 +15,7 @@ transcoord(data, longitude, latitude, coordsys = "autonavi", ncore = 999)
 
 \item{coordsys}{The coordinate system of your original location data, such as "gps", "baidu", "mapbar" and "autonavi" (coordsys = "autonavi" by default)}
 
-\item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates maximum of CPU cores minus 1 )}
+\item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)}
 }
 \value{
 a data.table which adds the transformed longitude and latitude using Amap System in the original data set

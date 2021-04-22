@@ -11,7 +11,7 @@ geocoord(data, address, ncore = 999)
 
 \item{address}{The column name of address}
 
-\item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates maximum of CPU cores minus 1 )}
+\item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)}
 }
 \value{
 a data.table which adds the formatted address, longitude and latitude in the original data set.

@@ -11,7 +11,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
-#' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates maximum of CPU cores minus 1 )
+#' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)
 #' @return a data.table which adds the formatted address, longitude and latitude in the original data set.
 #' @note According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
 #' If a address is in English or includes special characters (i.e., ?, -, >, _, etc.), the function may return empty result for this address automatically.

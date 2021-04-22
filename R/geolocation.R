@@ -12,7 +12,7 @@
 #' @param data The dataset, a data.frame or data.table
 #' @param longitude The column having longitude
 #' @param latitude The column having latitude
-#' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates maximum of CPU cores minus 1 )
+#' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)
 #' @return  a data.table which adds the formatted address in the original data set.
 #' @note The value of "longitude" or "latitude" should be digits in numeric or character format. If not, the function may return empty result for this coordinate automatically.
 #' @references Amap. Official documents for developers: Web Service API. https://lbs.amap.com/api/webservice/summary
@@ -42,6 +42,11 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
   coord_clean <- function(x){
     x <- as.numeric(x)
     x <- round(x, 6)
+    if (is.numeric(x) == F){
+      x <- str_replace_all(x, "[^[:alnum:]]", "")
+      x <- str_replace_all(x, "[a-z]", "")
+      x <- str_replace_all(x, "A-Z", "")
+    }
     return(x)
   }
   if (nrow(data) <= 200) {
