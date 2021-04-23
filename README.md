@@ -9,7 +9,7 @@ An R package using AMap Web Service API to convert between addresses and coordin
 
 - **Batch query**
 
-   This package embed the batch query feature of AMap Web Service API, which allows us to query a batch of addresses or coordinates in one time. For example, AMap API can convert 10 addresses into coordinates in one query. The upper query limit for personal certified developer is 3 millions per day. That is, a personal certified developer, theoratically, can convert <u>30 million</u> addresses per day.
+   This package embeds the batch query feature of AMap Web Service API, which allows us to query a batch of addresses or coordinates in one time. For example, AMap API can convert 10 addresses into coordinates in one query. The upper query limit for personal certified developer is 3 million per day. That is, a personal certified developer, theoratically, can convert <u>30 million</u> addresses per day.
 
 - **Handle special characteristics or missing value**
 
@@ -77,7 +77,7 @@ result
 200: 200     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
 ```
 
-- When the number of addresses is over 200, `geocoord` utilizes multiple processors and runs parallel computation. The following examples were run in the MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports) with Intel Core i5 (2 cores and 4 threads).
+- When the number of addresses is over 200, `geocoord` utilizes multiple processors and parallel computation. The following examples were run in the MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports) with Intel Core i5 (2 cores, 4 threads).
 
 >1,000 addresses
 
