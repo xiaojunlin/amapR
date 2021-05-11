@@ -4,7 +4,7 @@
 \alias{geocoord}
 \title{Convert addresses into coordinates}
 \usage{
-geocoord(data, address, ncore = 999)
+geocoord(data, address, ncore = 999, nquery = 10)
 }
 \arguments{
 \item{data}{The dataset, a data.frame or data.table}
@@ -12,6 +12,8 @@ geocoord(data, address, ncore = 999)
 \item{address}{The column name of address}
 
 \item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)}
+
+\item{nquery}{The number of query per batch (nquery = 10 by default)}
 }
 \value{
 a data.table which adds the formatted address, longitude and latitude in the original data set.

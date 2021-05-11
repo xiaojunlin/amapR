@@ -12,6 +12,7 @@
 #' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
 #' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)
+#' @param nquery The number of query per batch (nquery = 10 by default)
 #' @return a data.table which adds the formatted address, longitude and latitude in the original data set.
 #' @note According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
 #' If a address is in English or includes special characters (i.e., ?, -, >, _, etc.), the function may return empty result for this address automatically.
@@ -30,10 +31,13 @@
 #' results <- geocoord(data = test, address = "address", ncore = 4)
 #' }
 #'
-geocoord <- function(data, address, ncore = 999) {
+geocoord <- function(data, address, ncore = 999, nquery = 10) {
   key <- getOption("amap.key")
   if (is.null(getOption("amap.key"))) {
     stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
+  }
+  if (nquery > 10) {
+    stop("The maximum of query per batch is 10. Please reset the number of nquery.")
   }
   stringreplace <- function(x) {
       x <- str_replace_all(x, "[^[:alnum:]]", "_")
@@ -44,12 +48,12 @@ geocoord <- function(data, address, ncore = 999) {
     return(x)
   }
   if (nrow(data) <= 200) {
-    query1 <- function(data, address) {
+    query1 <- function(data, address, nquery) {
       df <- as.data.table(data)
       dat <- data.table()
-      pb <- txtProgressBar(max = ceiling(df[, .N] / 10), style = 3, char = ":", width = 70)
-      for (i in seq(1, df[, .N], by = 10)) {
-        j <- min(i + 9, df[, .N])
+      pb <- txtProgressBar(max = ceiling(df[, .N] / nquery), style = 3, char = ":", width = 70)
+      for (i in seq(1, df[, .N], by = nquery)) {
+        j <- min(i + (nquery - 1), df[, .N])
         tmp <- df[i:j, ][, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
         url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key,
                       "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"))
@@ -77,7 +81,7 @@ geocoord <- function(data, address, ncore = 999) {
         }
         tmp <- cbind(tmp, geocode)[, trim_addr := NULL]
         dat <- rbind(dat, tmp)
-        utils::setTxtProgressBar(pb, ceiling(i / 10))
+        utils::setTxtProgressBar(pb, ceiling(i / nquery))
       }
       results <- dat[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
                      ][, longitude := as.numeric(longitude)
@@ -88,9 +92,9 @@ geocoord <- function(data, address, ncore = 999) {
       cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
       return(results)
     }
-    query1(data, address)
+    query1(data, address, nquery)
   } else {
-    query2 <- function(data, address) {
+    query2 <- function(data, address, nquery) {
       df <- as.data.table(data)
       tmp <- df[, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
       url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=",
@@ -117,7 +121,7 @@ geocoord <- function(data, address, ncore = 999) {
       dat <- cbind(tmp, geocode)[, trim_addr := NULL]
       return(dat)
     }
-    spldata <- split(data, f = ceiling(seq(nrow(data)) / 10))
+    spldata <- split(data, f = ceiling(seq(nrow(data)) / nquery))
     pb <- txtProgressBar(max = length(spldata), style = 3, char = ":", width = 70)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
@@ -126,7 +130,7 @@ geocoord <- function(data, address, ncore = 999) {
     registerDoSNOW(cl)
     boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts)
     myfunc <- function(i) {
-      query2(spldata[[i]], address)
+      query2(spldata[[i]], address, nquery)
     }
     result <- `%dopar%`(boot, myfunc(i))
     results <- do.call("rbind", result)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
