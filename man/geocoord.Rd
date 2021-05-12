@@ -13,7 +13,7 @@ geocoord(data, address, ncore = 999, nquery = 10)
 
 \item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)}
 
-\item{nquery}{The number of query per batch (nquery = 10 by default)}
+\item{nquery}{The number of query in each batch (nquery = 10 by default). This argument is used to avoid the http 413 error when the request url is too long.}
 }
 \value{
 a data.table which adds the formatted address, longitude and latitude in the original data set.
@@ -34,8 +34,8 @@ options(amap.key = "xxxxxxxxxxxx")
 # should be a data.frame or a data.table.
 results <- geocoord(data = test, address = "address")
 
-# Set the specific number of CPU cores used
-results <- geocoord(data = test, address = "address", ncore = 4)
+# Set the specific number of CPU cores used and the number of query in each batch
+results <- geocoord(data = test, address = "address", ncore = 4, nquery = 5)
 }
 
 }
