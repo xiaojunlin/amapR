@@ -29,7 +29,7 @@ An R package using AMap Web Service API to convert between addresses and coordin
 devtools::install_github("xiaojunlin/amapR") 
 ```
 
-**NOTE:** Before using the package, please make sure that you have applied the AMap Web Service API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key). Here is the [manual](docs/amapR_0.2.2.pdf) for this package.
+**NOTE:** Before using the package, please make sure that you have applied the AMap Web Service API key from the [official website](https://lbs.amap.com/api/webservice/guide/create-project/get-key). Here is the [manual](docs/amapR_0.2.3.pdf) for this package.
 
 ## geocoord
 
