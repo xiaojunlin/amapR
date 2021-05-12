@@ -11,7 +11,8 @@ geocoord(data, address, city = "", ncore = 999, nquery = 10)
 
 \item{address}{The column name of address}
 
-\item{city}{Specify the city to query using the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap. By default, this argument is empty.}
+\item{city}{Specify the city to query. This argument supports the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap.
+By default, this argument is empty. For more information, see the Amap official documents at https://lbs.amap.com/api/webservice/guide/api/georegeo.}
 
 \item{ncore}{The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)}
 
@@ -40,7 +41,7 @@ results <- geocoord(data = test, address = "address")
 results <- geocoord(data = test, address = "address", ncore = 4, nquery = 5)
 
 # Specify the city to query
-results <- geocoord(data = test, address = "address", city = "cityname")
+results <- geocoord(data = test, address = "address", city = "chengdu")
 }
 
 }

@@ -11,7 +11,8 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
-#' @param city Specify the city to query using the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap. By default, this argument is empty.
+#' @param city Specify the city to query. This argument supports the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap.
+#' By default, this argument is empty. For more information, see the Amap official documents at https://lbs.amap.com/api/webservice/guide/api/georegeo.
 #' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)
 #' @param nquery The number of query in each batch (nquery = 10 by default). This argument is used to avoid the http 413 error when the request url is too long.
 #' @return a data.table which adds the formatted address, longitude and latitude in the original data set.
@@ -32,7 +33,7 @@
 #' results <- geocoord(data = test, address = "address", ncore = 4, nquery = 5)
 #'
 #' # Specify the city to query
-#' results <- geocoord(data = test, address = "address", city = "cityname")
+#' results <- geocoord(data = test, address = "address", city = "chengdu")
 #' }
 #'
 geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
