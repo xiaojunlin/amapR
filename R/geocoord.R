@@ -11,6 +11,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
+#' @param city Specify the city to query using the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap. By default, this argument is empty.
 #' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)
 #' @param nquery The number of query in each batch (nquery = 10 by default). This argument is used to avoid the http 413 error when the request url is too long.
 #' @return a data.table which adds the formatted address, longitude and latitude in the original data set.
@@ -29,9 +30,12 @@
 #'
 #' # Set the specific number of CPU cores used and the number of query in each batch
 #' results <- geocoord(data = test, address = "address", ncore = 4, nquery = 5)
+#'
+#' # Specify the city to query
+#' results <- geocoord(data = test, address = "address", city = "cityname")
 #' }
 #'
-geocoord <- function(data, address, ncore = 999, nquery = 10) {
+geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
   key <- getOption("amap.key")
   if (is.null(getOption("amap.key"))) {
     stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
@@ -48,7 +52,7 @@ geocoord <- function(data, address, ncore = 999, nquery = 10) {
     return(x)
   }
   if (nrow(data) <= 200) {
-    query1 <- function(data, address, nquery) {
+    query1 <- function(data, address, city, nquery) {
       df <- as.data.table(data)
       dat <- data.table()
       pb <- txtProgressBar(max = ceiling(df[, .N] / nquery), style = 3, char = ":", width = 70)
@@ -56,7 +60,7 @@ geocoord <- function(data, address, ncore = 999, nquery = 10) {
         j <- min(i + (nquery - 1), df[, .N])
         tmp <- df[i:j, ][, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
         url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key,
-                      "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"))
+                      "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"), "&city=", city)
         list <- fromJSON(url)
         switch (list$info,
                 "INVALID_USER_KEY" = {
@@ -92,13 +96,13 @@ geocoord <- function(data, address, ncore = 999, nquery = 10) {
       cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
       return(results)
     }
-    query1(data, address, nquery)
+    query1(data, address, city, nquery)
   } else {
-    query2 <- function(data, address, nquery) {
+    query2 <- function(data, address, city, nquery) {
       df <- as.data.table(data)
       tmp <- df[, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
       url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=",
-                    key, "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"))
+                    key, "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"), "&city=", city)
       list <- fromJSON(url)
       switch (list$info,
               "INVALID_USER_KEY" = {
@@ -130,7 +134,7 @@ geocoord <- function(data, address, ncore = 999, nquery = 10) {
     registerDoSNOW(cl)
     boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts)
     myfunc <- function(i) {
-      query2(spldata[[i]], address, nquery)
+      query2(spldata[[i]], address, city, nquery)
     }
     result <- `%dopar%`(boot, myfunc(i))
     results <- do.call("rbind", result)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
