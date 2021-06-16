@@ -37,6 +37,7 @@
 #' }
 #'
 geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
+  options(digits=9)
   key <- getOption("amap.key")
   if (is.null(getOption("amap.key"))) {
     stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
