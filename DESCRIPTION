@@ -1,16 +1,16 @@
 Package: amapR
 Type: Package
 Title: An R package using AMap Web Service API to convert between addresses and coordinates
-Version: 0.2.4
+Version: 0.2.5
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Description: 
   This R package provides useful tools for research using AMap Web Service API. 'amapR' currently can be use to convert between Chinese addresses and coordinates. Benefiting from the R parallel computing, this package has speed advantage in handling large data of addresses or coordinates. Theoratically, the more CPU cores you have, the faster the functions in this package will be. Please note that the Amap Web Service API have set the query limit for developers (e.g., the upper query limits for personal certified developer are 200 times per second and 3 million times per day). 
 URL: https://github.com/xiaojunlin/amapR
 BugReports: https://github.com/xiaojunlin/amapR/issues
-Imports: data.table, jsonlite, progress, parallel, doSNOW, foreach, stringr, stats, utils
+Imports: data.table, sf, jsonlite, progress, parallel, doSNOW, foreach, stringr, stats, utils
 NeedsCompilation: no
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.0.0), dplyr
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.1.1

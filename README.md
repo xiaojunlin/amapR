@@ -1,6 +1,8 @@
 # amapR
 An R package using AMap Web Service API to convert between addresses and coordinates.
 
+**Latest Version: 0.2.5**
+
 ## Package features
 
 - **Parallel computing**
@@ -22,6 +24,7 @@ An R package using AMap Web Service API to convert between addresses and coordin
 - **Breif report**
   
   A berif report including the success and failure rates is shown at the end of query.
+
 
 ## Installation
 
@@ -274,4 +277,55 @@ system.time( results <- transcoord(data = test, longitude = "lng", latitude = "l
 Success rate:100% | Failure rate:0%
 user    system  elapsed 
 0.316   0.108   16.892 
+```
+
+
+## getmap
+
+Get the map data at province, city, or district level.
+
+Examples:
+
+> China Map
+
+```R
+library(ggplot2)
+library(amapR)
+
+map <- getmap(adcode = 100000, level = "province")
+ggplot(map) +
+  geom_sf(fill = "white") +
+  theme_bw()
+
+map <- getmap(adcode = 100000, level = "city")
+ggplot(map) +
+  geom_sf(fill = "white") +
+  theme_bw()
+
+map <- getmap(adcode = 100000, level = "district")
+ggplot(map) +
+  geom_sf(fill = "white") +
+  theme_bw()
+```
+
+> Sichuan Map
+
+```R
+library(ggplot2)
+library(amapR)
+
+map <- getmap(adcode = 510000, level = "province")
+ggplot(map) +
+  geom_sf(fill = "white") +
+  theme_bw()
+
+map <- getmap(adcode = 510000, level = "city")
+ggplot(map) +
+  geom_sf(fill = "white") +
+  theme_bw()
+
+map <- getmap(adcode = 510000, level = "district")
+ggplot(map) +
+  geom_sf(fill = "white") +
+  theme_bw()
 ```
