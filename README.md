@@ -3,6 +3,8 @@ An R package using AMap Web Service API to convert between addresses and coordin
 
 **Latest Version: 0.2.5**
 
+[**Manual**](https://github.com/xiaojunlin/amapR/raw/master/docs/amapR_0.2.5.pdf)
+
 ## Package features
 
 - **Parallel computing**
