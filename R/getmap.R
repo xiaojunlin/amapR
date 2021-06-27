@@ -1,5 +1,5 @@
-#' @title Getting the map data with sf format
-#' @description Getting the map data with sf format
+#' @title Get the map data with sf format
+#' @description Get the map data at province, city or district level
 #' @import sf
 #' @importFrom dplyr select filter %>% rename
 #' @import foreach

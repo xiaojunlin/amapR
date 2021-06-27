@@ -2,7 +2,7 @@
 % Please edit documentation in R/getmap.R
 \name{getmap}
 \alias{getmap}
-\title{Getting the map data with sf format}
+\title{Get the map data with sf format}
 \usage{
 getmap(adcode, level = "default")
 }
@@ -15,7 +15,7 @@ getmap(adcode, level = "default")
 sf data
 }
 \description{
-Getting the map data with sf format
+Get the map data at province, city or district level
 }
 \examples{
 \dontrun{
