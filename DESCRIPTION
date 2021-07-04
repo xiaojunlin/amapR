@@ -1,7 +1,7 @@
 Package: amapR
 Type: Package
 Title: An R package using AMap Web Service API to convert between addresses and coordinates
-Version: 0.2.5
+Version: 0.2.6
 Author: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Maintainer: Xiaojun Lin <linxiaojun@scu.edu.cn>
 Description: 

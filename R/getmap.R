@@ -74,8 +74,8 @@ getmap <- function(adcode, level = "default") {
              # Provincial map
              map_province <- read_sf("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json") %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
-             tmp <- select(map_province, c(adcode, name_province)) %>% filter(adcode != "100000" & adcode != "710000")
-             dash_line <- filter(map_province, adcode == "100000") %>% select(c(adcode, name_province, level))
+             tmp <- select(map_province, c(adcode, name_province)) %>% filter(adcode != "100000_JD" & adcode != "710000")
+             dash_line <- filter(map_province, adcode == "100000_JD") %>% select(c(adcode, name_province, level))
              dash_line$name_city <- NA
              dash_line$name_district <- NA
              dash_line1 <- select(dash_line, c(adcode, name_province, name_city, level))
@@ -104,8 +104,8 @@ getmap <- function(adcode, level = "default") {
              # Provincial map
              map_province <- read_sf("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json") %>% select(c(adcode, name, level))
              map_province <- rename(map_province, "name_province" = "name")
-             tmp <- select(map_province, c(adcode, name_province)) %>% filter(adcode != "100000" & adcode != "710000")
-             dash_line <- filter(map_province, adcode == "100000") %>% select(c(adcode, name_province, level))
+             tmp <- select(map_province, c(adcode, name_province)) %>% filter(adcode != "100000_JD" & adcode != "710000")
+             dash_line <- filter(map_province, adcode == "100000_JD") %>% select(c(adcode, name_province, level))
              dash_line$name_city <- NA
              dash_line$name_district <- NA
              dash_line1 <- select(dash_line, c(adcode, name_province, name_city, level))
