@@ -27,6 +27,7 @@
 #' results <- transcoord(data = test, longitude = "lng", latitude = "lat", coordsys = "baidu")
 #' }
 transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore = 999) {
+  options(digits=9)
   if (is.null(getOption("amap.key")))
     stop("Please fill your key using 'options(amap.key = 'xxxxxxxxxxxx')' ")
   key <- getOption("amap.key")
