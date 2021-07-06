@@ -1,9 +1,9 @@
 # amapR
 An R package using AMap Web Service API to convert between addresses and coordinates.
 
-**Latest Version: 0.2.6**
+**Latest Version: 0.2.7**
 
-[**Manual**](https://github.com/xiaojunlin/amapR/raw/master/docs/amapR_0.2.6.pdf)
+[**Manual**](https://github.com/xiaojunlin/amapR/raw/master/docs/amapR_0.2.7.pdf)
 
 ## Package features
 
