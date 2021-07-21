@@ -1,0 +1,7 @@
+ISSUES：
+
+1. task 7113 failed - "Timeout was reached: [restapi.amap.com] Connection timed out after 10003 milliseconds"
+
+Solution: 
+options(timeout = 4000000) 
+timeout(4000000)
