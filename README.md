@@ -188,6 +188,8 @@ user    system  elapsed
 
 > Get the map data at province, city, or district level.
 
+You can get the administrative division codes in the [city lists](https://lbs.amap.com/api/webservice/download) provided by Amap.
+
 Examples:
 
 - China Map
@@ -233,3 +235,8 @@ ggplot(map) +
   geom_sf(fill = "white") +
   theme_bw()
 ```
+
+## References
+[1] [Amap Webservices API](https://lbs.amap.com/api/webservice/summary)
+
+[2] [DATAV.GeoAtlas](https://datav.aliyun.com/tools/atlas/index.html#&lat=10.14193168613103&lng=166.46484375&zoom=2)
