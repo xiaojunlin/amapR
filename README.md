@@ -50,9 +50,9 @@ options(amap.key = 'xxxxxxxx')
 ![geocoord example](docs/geocoord_example.gif)
 
 
-- When the number of addresses is less than or equal to 200, `geocoord` only utilizes one processor, which makes it single-threaded.
+When the number of addresses is less than or equal to 200, `geocoord` only utilizes one processor, which makes it single-threaded.
 
->200 addresses
+- 200 addresses
 
 ```R
 test <- data.frame(n = 1:200, address = c("华中科技大学", "四川大学"))
@@ -84,9 +84,9 @@ result
 200: 200     四川大学     四川省成都市武侯区四川大学  104.0837 30.63087
 ```
 
-- When the number of addresses is over 200, `geocoord` utilizes multiple processors and parallel computation. The following examples were run in the MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports) with Intel Core i5 (2 cores, 4 threads).
+When the number of addresses is over 200, `geocoord` utilizes multiple processors and parallel computation. The following examples were run in the MacBook Pro (13-inch, 2016, Four Thunderbolt 3 Ports) with Intel Core i5 (2 cores, 4 threads).
 
->10,000 addresses
+- 10,000 addresses
 
 ```R
 # 10,000 addresses
@@ -99,25 +99,6 @@ Success rate:100% | Failure rate:0%
 user     system    elapsed
 1.044    0.344     64.697   
 ```
-
-
-**Benchmarking**
-
-[`amapGeocode`](https://cran.r-project.org/web/packages/amapGeocode/index.html) is a popular R package using AMap API to convert between addresses and coordinates. The `getCoord` function in this package could convert addresses into coordinates. To compare the speed of `amapGeocode::getCoord` and `amapR::geocode`, we had queried a series of addresses using these two functions, respectively. The results were shown below.
-
-| Testing environment|  | 
-| ------ | ------ | 
-| Operation System | Windows 10 | 
-| CPU | 3.6GHz Intel Core i7 (4 cores and 8 threads) |
-| Memory | 8 GB  |
-| R version | 4.0.5 |
-| RStudio version | 1.4.1106 |
-| Network| China Telecom, Chengdu|
-| Date |2021-04-20 8:00PM  (GMT+8) |F
-
-
-
-![benchmarking](docs/benchmarking.png)
 
 
 ### geolocation
