@@ -64,6 +64,9 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
         url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key,
                       "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"), "&city=", city)
         list <- fromJSON(url)
+        for (z in 1:10) {
+           if (length(list) != 5) { list <- fromJSON(url) } 
+         }
         switch (list$info,
                 "INVALID_USER_KEY" = {
                   message("\nYour key is invalid. Please use a valid key.")
@@ -106,6 +109,9 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
       url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=",
                     key, "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"), "&city=", city)
       list <- fromJSON(url)
+      for (z in 1:10) {
+           if (length(list) != 5) { list <- fromJSON(url) } 
+        }
       switch (list$info,
               "INVALID_USER_KEY" = {
                 stop("\nYour key is invalid. Please use a valid key.")
