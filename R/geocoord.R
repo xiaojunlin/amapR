@@ -140,7 +140,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
     cores <- min((detectCores() - 1), ncore)
     cl <- makeCluster(cores)
     registerDoSNOW(cl)
-    boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts)
+    boot <- foreach(i = seq_len(length(spldata)), .options.snow = opts, .errorhandling = "remove")
     myfunc <- function(i) {
       query2(spldata[[i]], address, city, nquery)
     }
