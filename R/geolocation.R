@@ -94,9 +94,10 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
         })
         setTxtProgressBar(pb, ceiling(i/20))
       }
-      fail_rate <- round(sum(is.na(results[,formatted_address]))/results[,.N]*100, 1)
+      n_missed <- nrow(data) - nrow(results)
+      fail_rate <- round(sum(is.na(results[,formatted_address]))/nrow(data)*100, 1)
       succ_rate <- round(100 - fail_rate, 1)
-      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
+      cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, longitude, latitude)
@@ -145,9 +146,10 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
     result <- `%dopar%`(boot, myfunc(i))
     results <- do.call('rbind', result)
     stopCluster(cl)
-    fail_rate <- round(sum(is.na(results[,formatted_address]))/results[,.N]*100, 1)
+    n_missed <- nrow(data) - nrow(results)
+    fail_rate <- round(sum(is.na(results[,formatted_address]))/nrow(data)*100, 1)
     succ_rate <- round(100 - fail_rate, 1)
-    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
+    cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }

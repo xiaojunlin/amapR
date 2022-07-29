@@ -97,9 +97,10 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
                      ][, longitude := as.numeric(longitude)
                        ][, latitude := as.numeric(latitude)
                          ][, location := NULL]
-      succ_rate <- round(sum(complete.cases(results[, longitude])) / results[,.N] * 100, 1)
+      n_missed <- nrow(data) - nrow(results)
+      succ_rate <- round(sum(complete.cases(results[, longitude])) / nrow(data) * 100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
+      cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, address, city, nquery)
@@ -151,9 +152,10 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
                                           ][, latitude := as.numeric(latitude)
                                             ][, location := NULL]
     stopCluster(cl)
-    succ_rate <- round(sum(complete.cases(results[, longitude])) / results[,.N] * 100, 1)
+    n_missed <- nrow(data) - nrow(results)
+    succ_rate <- round(sum(complete.cases(results[, longitude])) / nrow(data) * 100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
+    cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }
