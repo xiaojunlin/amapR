@@ -9,7 +9,6 @@
 #' @importFrom stringr str_replace_all
 #' @importFrom stats complete.cases
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @importFrom plyr rbind.fill
 #' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
 #' @param city Specify the city to query. This argument supports the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap.
@@ -147,8 +146,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10, errorme
       query2(spldata[[i]], address, city, nquery)
     }
     result <- `%dopar%`(boot, myfunc(i))
-    results <- do.call("rbind.fill", result)
-    results <- as.data.table(results)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
+    results <- do.call("rbindlist", c(result, fill=TRUE))[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
                                         ][, longitude := as.numeric(longitude)
                                           ][, latitude := as.numeric(latitude)
                                             ][, location := NULL]
