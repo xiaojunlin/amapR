@@ -10,15 +10,17 @@
 #' @importFrom stringr str_replace_all
 #' @importFrom stats complete.cases
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @param data The dataset, a data.frame or data.table
+#' @param data The dataset, a data.frame or data.table.
 #' @param address The column name of address
 #' @param city Specify the city to query. This argument supports the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap.
 #' By default, this argument is empty. For more information, see the Amap official documents at https://lbs.amap.com/api/webservice/guide/api/georegeo.
 #' @param ncore The specific number of CPU cores used (ncore = 999 by default, which indicates the maximum of CPU cores minus 1 were used in parallel computing if your CPU is less than 999 cores)
 #' @param nquery The number of query in each batch (nquery = 10 by default). This argument is used to avoid the http 413 error when the request url is too long.
 #' @return a data.table which adds the formatted address, longitude and latitude in the original data set.
-#' @note According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
+#' @note (1) According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
 #' If a address is in English or includes special characters (i.e., ?, -, >, _, etc.), the function may return empty result for this address automatically.
+#' (2) Task may fail when the network connection between you and Amap API is unstable. To avoid loop break in this function, the result for that task will not be returned. Therefore, the final results returned may be less than the original data.
+#' If you want to check where the task failed, I suggest adding an ID column to the original data and comparing the IDs between the final results returned and original data.
 #' @references Amap. Official documents for developers: Web Service API. https://lbs.amap.com/api/webservice/summary
 #' @export geocoord
 #' @examples

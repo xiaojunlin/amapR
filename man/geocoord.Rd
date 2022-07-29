@@ -7,7 +7,7 @@
 geocoord(data, address, city = "", ncore = 999, nquery = 10)
 }
 \arguments{
-\item{data}{The dataset, a data.frame or data.table}
+\item{data}{The dataset, a data.frame or data.table.}
 
 \item{address}{The column name of address}
 
@@ -25,8 +25,10 @@ a data.table which adds the formatted address, longitude and latitude in the ori
 Convert addresses into coordinates
 }
 \note{
-According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
+(1) According to the official document of AMap Web Service API, the address in the data set should be in Chinese format.
 If a address is in English or includes special characters (i.e., ?, -, >, _, etc.), the function may return empty result for this address automatically.
+(2) Task may fail when the network connection between you and Amap API is unstable. To avoid loop break in this function, the result for that task will not be returned. Therefore, the final results returned may be less than the original data.
+If you want to check where the task failed, I suggest adding an ID column to the original data and comparing the IDs between the final results returned and original data.
 }
 \examples{
 \dontrun{

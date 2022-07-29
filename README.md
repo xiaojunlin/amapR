@@ -7,9 +7,9 @@ Now, this packge has four functions:
 - `transcoord`: Transform the coordinates from other coordinate systems to amap coordinate system
 - `getmap`: get the map data at province, city, or district level
 
-**Latest Version: 0.2.8**
+**Latest Version: 0.2.9**
 
-[**Manual**](https://github.com/xiaojunlin/amapR/raw/master/docs/amapR_0.2.8.pdf)
+[**Manual**](https://github.com/xiaojunlin/amapR/raw/master/docs/amapR_0.2.9.pdf)
 
 ## Package features
 
