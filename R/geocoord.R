@@ -100,7 +100,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
       n_missed <- nrow(data) - nrow(results)
       succ_rate <- round(sum(complete.cases(results[, longitude])) / nrow(data) * 100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
+      cat("\nUnfinished case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, address, city, nquery)
@@ -155,7 +155,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
     n_missed <- nrow(data) - nrow(results)
     succ_rate <- round(sum(complete.cases(results[, longitude])) / nrow(data) * 100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
+    cat("\nUnfinished case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }

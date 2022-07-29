@@ -93,7 +93,7 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
       n_missed <- nrow(data) - nrow(results)
       succ_rate <- round(results[is.na(lng_amap) == F & is.na(lat_amap) == F,.N]/nrow(data)*100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
+      cat("\nUnfinished case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, longitude, latitude, coordsys)
@@ -149,7 +149,7 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
     n_missed <- nrow(data) - nrow(results)
     succ_rate <- round(results[is.na(lng_amap) == F & is.na(lat_amap) == F,.N]/nrow(data)*100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    cat("\nUncompleted case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
+    cat("\nUnfinished case(s): " %+% underline(n_missed) %+% "\nSuccess: " %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure: " %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }
