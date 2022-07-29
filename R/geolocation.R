@@ -96,7 +96,7 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
       }
       fail_rate <- round(sum(is.na(results[,formatted_address]))/results[,.N]*100, 1)
       succ_rate <- round(100 - fail_rate, 1)
-      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%"))
+      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, longitude, latitude)
@@ -147,7 +147,7 @@ geolocation <- function(data, longitude, latitude, ncore = 999) {
     stopCluster(cl)
     fail_rate <- round(sum(is.na(results[,formatted_address]))/results[,.N]*100, 1)
     succ_rate <- round(100 - fail_rate, 1)
-    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%"))
+    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }

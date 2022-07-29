@@ -99,7 +99,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
                          ][, location := NULL]
       succ_rate <- round(sum(complete.cases(results[, longitude])) / results[,.N] * 100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%"))
+      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, address, city, nquery)
@@ -153,7 +153,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
     stopCluster(cl)
     succ_rate <- round(sum(complete.cases(results[, longitude])) / results[,.N] * 100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%"))
+    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }

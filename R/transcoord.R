@@ -92,7 +92,7 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
       results <- results[, `:=`(miss_lng = NULL, miss_lat = NULL, trim_location = NULL, location = NULL)]
       succ_rate <- round(results[is.na(lng_amap) == F & is.na(lat_amap) == F,.N]/results[,.N]*100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%"))
+      cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
       return(results)
     }
     query1(data, longitude, latitude, coordsys)
@@ -147,7 +147,7 @@ transcoord <- function(data, longitude, latitude, coordsys = "autonavi", ncore =
     stopCluster(cl)
     succ_rate <- round(results[is.na(lng_amap) == F & is.na(lat_amap) == F,.N]/results[,.N]*100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%"))
+    cat("\nSuccess:" %+% green(succ_rate) %+% green("%") %+% " | " %+%  "Failure:" %+% red(fail_rate) %+% red("%\n"))
     return(results)
   }
 }
