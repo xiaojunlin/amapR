@@ -147,7 +147,8 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10, errorme
       query2(spldata[[i]], address, city, nquery)
     }
     result <- `%dopar%`(boot, myfunc(i))
-    results <- do.call("rbind.fill", result)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
+    results <- do.call("rbind.fill", result)
+    results <- as.data.table(results)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
                                         ][, longitude := as.numeric(longitude)
                                           ][, latitude := as.numeric(latitude)
                                             ][, location := NULL]
