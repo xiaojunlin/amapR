@@ -60,7 +60,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
     query1 <- function(data, address, city, nquery) {
       df <- as.data.table(data)
       dat <- data.table()
-      pb <- txtProgressBar(max = ceiling(df[, .N] / nquery), style = 3, char = bgCyan(" "), width = 70)
+      pb <- txtProgressBar(max = ceiling(df[, .N] / nquery), style = 3, char = ":", width = 70)
       for (i in seq(1, df[, .N], by = nquery)) {
         j <- min(i + (nquery - 1), df[, .N])
         tmp <- df[i:j, ][, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
@@ -138,7 +138,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
       return(dat)
     }
     spldata <- split(data, f = ceiling(seq(nrow(data)) / nquery))
-    pb <- txtProgressBar(max = length(spldata), style = 3, char = bgCyan(" "), width = 70)
+    pb <- txtProgressBar(max = length(spldata), style = 3, char = ":", width = 70)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
     cores <- min((detectCores() - 1), ncore)
