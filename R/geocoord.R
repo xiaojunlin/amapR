@@ -9,6 +9,7 @@
 #' @importFrom stringr str_replace_all
 #' @importFrom stats complete.cases
 #' @importFrom utils txtProgressBar setTxtProgressBar
+#' @importFrom plyr rbind.fill
 #' @param data The dataset, a data.frame or data.table
 #' @param address The column name of address
 #' @param city Specify the city to query. This argument supports the city name in Chinese, the city name in pinyin, the administrative code of city or the city code defined by Amap.
@@ -99,7 +100,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10, errorme
                          ][, location := NULL]
       succ_rate <- round(sum(complete.cases(results[, longitude])) / results[,.N] * 100, 1)
       fail_rate <- round(100 - succ_rate, 1)
-      cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
+      cat(paste0("\nSuccess:", succ_rate, "%", " | ", "Failure:", fail_rate, "%\n"))
       return(results)
     }
     query1(data, address, city, nquery)
@@ -146,14 +147,14 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10, errorme
       query2(spldata[[i]], address, city, nquery)
     }
     result <- `%dopar%`(boot, myfunc(i))
-    results <- do.call("rbind", c(result, fill = TRUE))[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
+    results <- do.call("rbind.fill", result)[, c("longitude", "latitude") := tstrsplit(location, ",", fixed = TRUE)
                                         ][, longitude := as.numeric(longitude)
                                           ][, latitude := as.numeric(latitude)
                                             ][, location := NULL]
     stopCluster(cl)
     succ_rate <- round(sum(complete.cases(results[, longitude])) / results[,.N] * 100, 1)
     fail_rate <- round(100 - succ_rate, 1)
-    cat(paste0("\nSuccess rate:", succ_rate, "%", " | ", "Failure rate:", fail_rate, "%\n"))
+    cat(paste0("\nSuccess:", succ_rate, "%", " | ", "Failure:", fail_rate, "%\n"))
     return(results)
   }
 }
