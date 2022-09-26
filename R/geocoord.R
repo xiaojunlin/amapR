@@ -64,7 +64,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
       for (i in seq(1, df[, .N], by = nquery)) {
         j <- min(i + (nquery - 1), df[, .N])
         tmp <- df[i:j, ][, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
-        url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=", key,
+        url <- paste0("https://restapi.amap.com/v5/geocode/geo?", "key=", key,
                       "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"), "&city=", city)
         list <- fromJSON(url)
         for (z in 1:10) {
@@ -110,7 +110,7 @@ geocoord <- function(data, address, city = "", ncore = 999, nquery = 10) {
     query2 <- function(data, address, city, nquery) {
       df <- as.data.table(data)
       tmp <- df[, trim_addr := lapply(.SD, stringreplace), .SDcols = address]
-      url <- paste0("https://restapi.amap.com/v3/geocode/geo?", "key=",
+      url <- paste0("https://restapi.amap.com/v5/geocode/geo?", "key=",
                     key, "&batch=true", "&address=", paste0(tmp[, trim_addr], collapse = "|"), "&city=", city)
       list <- fromJSON(url)
       for (z in 1:10) {
